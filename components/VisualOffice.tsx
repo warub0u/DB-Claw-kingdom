@@ -90,9 +90,13 @@ export default function VisualOffice() {
       </div>
 
       {/* JRPG Sprite Grid - The Guild Hall */}
-      <div className="glass-card p-5">
-        <h3 className="text-sm font-medium text-white mb-4">⚔️ The Guild Hall - Party Members</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="glass-card p-5 relative overflow-hidden">
+        {/* Floor tile background */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none" 
+          style={{ backgroundImage: 'url(/assets/tiles/Tilemap_color1.png)', backgroundSize: '32px 32px' }} 
+        />
+        <h3 className="text-sm font-medium text-white mb-4 relative z-10">⚔️ The Guild Hall - Party Members</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
           {partyMembers.map((member, i) => (
             <div key={i} className="bg-dusk-surface/50 rounded-xl p-4 text-center">
               {/* Sprite with animation */}
