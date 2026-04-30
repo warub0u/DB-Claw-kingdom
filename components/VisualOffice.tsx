@@ -103,8 +103,12 @@ export default function VisualOffice() {
                 <img 
                   src={getSpriteUrl(member)} 
                   alt={member.name}
-                  className="w-32 h-32 object-contain drop-shadow-2xl"
-                  style={{ imageRendering: 'pixelated' }}
+                  className="w-32 h-32 object-contain drop-shadow-2xl animate-gif"
+                  style={{ 
+                    imageRendering: 'pixelated' as const,
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden'
+                  }}
                 />
                 {/* Status glow */}
                 <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 rounded-full blur-md ${

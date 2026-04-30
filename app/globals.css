@@ -128,3 +128,18 @@ body {
 .recharts-text {
   fill: #94a3b8 !important;
 }
+/* GIF Animation Fix - Prevent ghosting/bleeding */
+@keyframes gifFrame {
+  0% { opacity: 1; }
+  50% { opacity: 0.99; }
+  100% { opacity: 1; }
+}
+
+.animate-gif {
+  animation: none;
+  transform: translateZ(0);
+  will-change: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
