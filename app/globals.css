@@ -143,3 +143,59 @@ body {
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+/* === CSS Sprite Sheet Animation === */
+.sprite-sheet {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+}
+
+/* Paladin: 400x64, 6 frames */
+.sprite-paladin {
+  width: 66px;
+  height: 64px;
+  background-image: url('/sprites/sheets/paladin_idle.png');
+  animation: sprite-paladin-anim 0.8s steps(6) infinite;
+}
+@keyframes sprite-paladin-anim {
+  from { background-position: 0 0; }
+  to { background-position: -396px 0; }
+}
+
+/* Wizard: 1400x140, 10 frames */
+.sprite-wizard {
+  width: 140px;
+  height: 140px;
+  background-image: url('/sprites/sheets/wizard_idle.png');
+  animation: sprite-wizard-anim 1s steps(10) infinite;
+}
+@keyframes sprite-wizard-anim {
+  from { background-position: 0 0; }
+  to { background-position: -1400px 0; }
+}
+
+/* Bard: 460x55, 8 frames */
+.sprite-bard {
+  width: 57px;
+  height: 55px;
+  background-image: url('/sprites/sheets/bard_idle.png');
+  animation: sprite-bard-anim 0.8s steps(8) infinite;
+}
+@keyframes sprite-bard-anim {
+  from { background-position: 0 0; }
+  to { background-position: -456px 0; }
+}
+
+/* Artificer: Same as paladin for now */
+.sprite-artificer {
+  width: 66px;
+  height: 64px;
+  background-image: url('/sprites/sheets/artificer_idle.png');
+  animation: sprite-artificer-anim 0.8s steps(6) infinite;
+}
+@keyframes sprite-artificer-anim {
+  from { background-position: 0 0; }
+  to { background-position: -396px 0; }
+}

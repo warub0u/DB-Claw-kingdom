@@ -10,8 +10,7 @@ interface PartyMember {
   status: 'active' | 'idle' | 'sleeping';
   quest: string;
   icon: string;
-  spriteIdle: string;
-  spriteAction: string;
+  spriteClass: string;
   animation: 'idle' | 'action';
   lastAction?: string;
   lastActionTime?: string;
@@ -20,10 +19,10 @@ interface PartyMember {
 
 // Party members with new sprites
 const partyMembers: PartyMember[] = [
-  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteIdle: '/sprites/party/full/paladin_200.gif', spriteAction: '/sprites/party/full/paladin_200.gif', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
-  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteIdle: '/sprites/party/full/wizard_200.gif', spriteAction: '/sprites/party/full/wizard_200.gif', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
-  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteIdle: '/sprites/party/full/bard_200.gif', spriteAction: '/sprites/party/full/bard_200.gif', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
-  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteIdle: '/sprites/party/full/artificer_200.gif', spriteAction: '/sprites/party/full/artificer_200.gif', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
+  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteClass: 'sprite-paladin', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
+  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteClass: 'sprite-wizard', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
+  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteClass: 'sprite-bard', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
+  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteClass: 'sprite-artificer', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
 ];
 
 const partyActivityLog = [
@@ -42,13 +41,7 @@ export default function VisualOffice() {
   const roi = ((currentNLV - capital) / capital * 100).toFixed(1);
 
   const getSpriteUrl = (member: PartyMember) => {
-    if (member.animation === 'action') return member.spriteAction;
-    return member.spriteIdle;
-  };
-
-  const getAnimationClass = (anim: string) => {
-    if (anim === 'action') return 'sprite-casting';
-    return 'sprite-idle';
+    return member.spriteClass;
   };
 
   return (
@@ -98,17 +91,10 @@ export default function VisualOffice() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
           {partyMembers.map((member, i) => (
             <div key={i} className="bg-black/40 rounded-xl p-4 text-center border border-slate-700">
-              {/* Large Sprite */}
+              {/* CSS Sprite Sheet Animation */}
               <div className="relative h-32 flex items-center justify-center mb-2">
-                <img 
-                  src={getSpriteUrl(member)} 
-                  alt={member.name}
-                  className="w-32 h-32 object-contain drop-shadow-2xl animate-gif"
-                  style={{ 
-                    imageRendering: 'pixelated' as const,
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden'
-                  }}
+                <div 
+                  className={`sprite-sheet ${getSpriteUrl(member)}`}
                 />
                 {/* Status glow */}
                 <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 rounded-full blur-md ${
