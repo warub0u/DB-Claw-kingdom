@@ -20,10 +20,10 @@ interface PartyMember {
 
 // Party members with new sprites
 const partyMembers: PartyMember[] = [
-  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteIdle: '/sprites/party/full/Knight_Idle.png', spriteAction: '/sprites/party/full/Knight_Walk.png', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
-  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteIdle: '/sprites/party/full/Wizard_Idle.png', spriteAction: '/sprites/party/full/Wizard_Attack.png', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
-  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteIdle: '/sprites/party/full/Bard_Idle.png', spriteAction: '/sprites/party/full/Bard_Walk.png', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
-  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteIdle: '/sprites/party/full/Hooded Protagonist.png', spriteAction: '/sprites/party/full/Hooded Protagonist.png', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
+  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteIdle: '/sprites/party/full/paladin_200.gif', spriteAction: '/sprites/party/full/paladin_200.gif', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
+  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteIdle: '/sprites/party/full/wizard_200.gif', spriteAction: '/sprites/party/full/wizard_200.gif', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
+  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteIdle: '/sprites/party/full/bard_200.gif', spriteAction: '/sprites/party/full/bard_200.gif', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
+  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteIdle: '/sprites/party/full/artificer_200.gif', spriteAction: '/sprites/party/full/artificer_200.gif', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
 ];
 
 const partyActivityLog = [
@@ -100,13 +100,12 @@ export default function VisualOffice() {
             <div key={i} className="bg-black/40 rounded-xl p-4 text-center border border-slate-700">
               {/* Large Sprite */}
               <div className="relative h-32 flex items-center justify-center mb-2">
-                <div className={`sprite-container ${getAnimationClass(member.animation)}`}>
-                  <img 
-                    src={getSpriteUrl(member)} 
-                    alt={member.name}
-                    className="w-28 h-28 object-contain drop-shadow-2xl"
-                  />
-                </div>
+                <img 
+                  src={getSpriteUrl(member)} 
+                  alt={member.name}
+                  className="w-32 h-32 object-contain drop-shadow-2xl"
+                  style={{ imageRendering: 'pixelated' }}
+                />
                 {/* Status glow */}
                 <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 rounded-full blur-md ${
                   member.status === 'active' ? 'bg-neon-green' : 'bg-slate-500'
