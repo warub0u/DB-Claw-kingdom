@@ -6,9 +6,10 @@ import QuestLog from '@/components/QuestLog';
 import Chronicle from '@/components/Chronicle';
 import Library from '@/components/Library';
 import Grimoire from '@/components/Grimoire';
+import BardWorkshop from '@/components/BardWorkshop';
 import PartyScreen from '@/components/PartyScreen';
 
-type Screen = 'office' | 'quest' | 'chronicle' | 'library' | 'grimoire' | 'party';
+type Screen = 'office' | 'quest' | 'chronicle' | 'library' | 'grimoire' | 'content' | 'party';
 
 const navItems: { id: Screen; label: string; icon: string }[] = [
   { id: 'office', label: 'Office', icon: '🏰' },
@@ -16,6 +17,7 @@ const navItems: { id: Screen; label: string; icon: string }[] = [
   { id: 'chronicle', label: 'Chronicle', icon: '📖' },
   { id: 'library', label: 'Library', icon: '📚' },
   { id: 'grimoire', label: 'Grimoire', icon: '🔮' },
+  { id: 'content', label: 'Content', icon: '🎭' },
   { id: 'party', label: 'Party', icon: '⚔️' },
 ];
 
@@ -49,6 +51,7 @@ export default function Home() {
         {activeScreen === 'chronicle' && <Chronicle />}
         {activeScreen === 'library' && <Library />}
         {activeScreen === 'grimoire' && <Grimoire />}
+        {activeScreen === 'content' && <BardWorkshop />}
         {activeScreen === 'party' && <PartyScreen />}
       </div>
     </div>
