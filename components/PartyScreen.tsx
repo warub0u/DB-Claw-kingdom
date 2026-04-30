@@ -157,38 +157,36 @@ export default function PartyScreen() {
         </div>
       )}
 
-      {/* HP/MP Bars - Portfolio Health - Sprite Style */}
+      {/* HP/MP Bars - Portfolio Health - CSS Version */}
       <div className="glass-card p-5">
         <h3 className="font-medium text-white mb-4">⚔️ Party Status</h3>
         
-        {/* HP Bar - Portfolio Health (Green bar sprite) */}
+        {/* HP Bar - Portfolio Health */}
         <div className="mb-4">
           <div className="flex justify-between text-sm mb-1">
             <span className="text-slate-400">HP (Portfolio Health)</span>
             <span className="text-neon-green font-medium">{hpPct.toFixed(0)}%</span>
           </div>
-          {/* Sprite-based bar */}
-          <div className="relative h-6 w-full">
-            <img src="/assets/bars/BigBar_Base.png" alt="HP Base" className="w-full h-full object-contain" />
-            <div className="absolute top-0 left-0 h-full overflow-hidden" style={{ width: `${(hpPct / 100) * 94}%` }}>
-              <img src="/assets/bars/BigBar_Fill.png" alt="HP Fill" className="h-full object-left" style={{ filter: 'hue-rotate(80deg) saturate(200%)' }} />
-            </div>
+          <div className="h-4 bg-dusk-surface/50 rounded-full overflow-hidden border border-slate-700">
+            <div 
+              className="h-full bg-gradient-to-r from-neon-green/60 to-neon-green transition-all duration-500"
+              style={{ width: `${hpPct}%` }}
+            />
           </div>
           <p className="text-xs text-slate-500 mt-1">NLV: ${nlv.toLocaleString()} / ${capital.toLocaleString()}</p>
         </div>
 
-        {/* MP Bar - Cash/Resources (Blue bar sprite) */}
+        {/* MP Bar - Cash/Resources */}
         <div>
           <div className="flex justify-between text-sm mb-1">
             <span className="text-slate-400">MP (Cash Reserves)</span>
             <span className="text-neon-cyan font-medium">{cashPct}%</span>
           </div>
-          {/* Sprite-based bar */}
-          <div className="relative h-6 w-full">
-            <img src="/assets/bars/BigBar_Base.png" alt="MP Base" className="w-full h-full object-contain" />
-            <div className="absolute top-0 left-0 h-full overflow-hidden" style={{ width: `${(cashPct / 100) * 94}%` }}>
-              <img src="/assets/bars/BigBar_Fill.png" alt="MP Fill" className="h-full object-left" />
-            </div>
+          <div className="h-4 bg-dusk-surface/50 rounded-full overflow-hidden border border-slate-700">
+            <div 
+              className="h-full bg-gradient-to-r from-neon-cyan/60 to-neon-cyan transition-all duration-500"
+              style={{ width: `${cashPct}%` }}
+            />
           </div>
           <p className="text-xs text-slate-500 mt-1">Available for new positions</p>
         </div>

@@ -91,21 +91,26 @@ export default function VisualOffice() {
 
       {/* JRPG Sprite Grid - The Guild Hall */}
       <div className="glass-card p-5 relative overflow-hidden">
-        {/* Floor tile background */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none" 
-          style={{ backgroundImage: 'url(/assets/tiles/Tilemap_color1.png)', backgroundSize: '32px 32px' }} 
+        {/* Dungeon background */}
+        <div className="absolute inset-0 pointer-events-none z-0" 
+          style={{ 
+            backgroundImage: 'url(/assets/dungeon.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.4
+          }} 
         />
         <h3 className="text-sm font-medium text-white mb-4 relative z-10">⚔️ The Guild Hall - Party Members</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
           {partyMembers.map((member, i) => (
             <div key={i} className="bg-dusk-surface/50 rounded-xl p-4 text-center">
               {/* Sprite with animation */}
-              <div className="relative h-24 flex items-center justify-center mb-2">
-                <div className={`sprite-container ${getAnimationClass(member.animation)}`}>
+              <div className="relative h-32 flex items-center justify-center mb-2">
+                <div className={`sprite-container w-28 h-28 ${getAnimationClass(member.animation)}`}>
                   <img 
                     src={getSpriteUrl(member.spriteBase, member.animation)} 
                     alt={member.name}
-                    className="w-16 h-16 object-contain"
+                    className="w-28 h-28 object-contain drop-shadow-xl"
                   />
                 </div>
                 {/* Status indicator */}
