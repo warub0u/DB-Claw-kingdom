@@ -98,8 +98,8 @@ export default function VisualOffice() {
                 <img 
                   src={getSpriteUrl(member)} 
                   alt={member.name}
-                  width={300}
-                  height={300}
+                  width={200}
+                  height={200}
                   className="object-contain drop-shadow-2xl"
                   style={{ 
                     imageRendering: 'pixelated',
