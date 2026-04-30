@@ -7,9 +7,10 @@ import Chronicle from '@/components/Chronicle';
 import Library from '@/components/Library';
 import Grimoire from '@/components/Grimoire';
 import BardWorkshop from '@/components/BardWorkshop';
+import QuestSchedule from '@/components/QuestSchedule';
 import PartyScreen from '@/components/PartyScreen';
 
-type Screen = 'office' | 'quest' | 'chronicle' | 'library' | 'grimoire' | 'content' | 'party';
+type Screen = 'office' | 'quest' | 'chronicle' | 'library' | 'grimoire' | 'content' | 'schedule' | 'party';
 
 const navItems: { id: Screen; label: string; icon: string }[] = [
   { id: 'office', label: 'Office', icon: '🏰' },
@@ -18,6 +19,7 @@ const navItems: { id: Screen; label: string; icon: string }[] = [
   { id: 'library', label: 'Library', icon: '📚' },
   { id: 'grimoire', label: 'Grimoire', icon: '🔮' },
   { id: 'content', label: 'Content', icon: '🎭' },
+  { id: 'schedule', label: 'Schedule', icon: '📅' },
   { id: 'party', label: 'Party', icon: '⚔️' },
 ];
 
@@ -26,7 +28,7 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* Modern Tab Navigation */}
+      {/* Tab Navigation */}
       <nav className="flex gap-2 overflow-x-auto pb-2">
         {navItems.map((item) => (
           <button
@@ -52,6 +54,7 @@ export default function Home() {
         {activeScreen === 'library' && <Library />}
         {activeScreen === 'grimoire' && <Grimoire />}
         {activeScreen === 'content' && <BardWorkshop />}
+        {activeScreen === 'schedule' && <QuestSchedule />}
         {activeScreen === 'party' && <PartyScreen />}
       </div>
     </div>
