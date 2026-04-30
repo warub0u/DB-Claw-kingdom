@@ -1,0 +1,96 @@
+{
+  "name": "YouTube Scrying Orb",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id={{channelId}}",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-trigger",
+      "name": "YouTube RSS Trigger",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items.map(item => {\n  const videoId = item.json['yt:videoId'];\n  return { json: { videoId, title: item.json.title, link: item.json.link, published: item.json.published } };\n});"
+      },
+      "id": "extract-video-id",
+      "name": "Extract Video ID",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://noembed.com/embed?url=https://www.youtube.com/watch?v={{$json.videoId}}",
+        "options": {"timeout": 10000}
+      },
+      "id": "get-video-metadata",
+      "name": "Get Video Metadata",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "transcript",
+        "videoId": "={{$json.videoId}}"
+      },
+      "id": "youtube-transcript",
+      "name": "YouTube Transcript",
+      "type": "n8n-nodes-base.youtube",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://i.ytimg.com/vi/{{$json.videoId}}/maxresdefault.jpg",
+        "responseType": "buffer"
+      },
+      "id": "get-thumbnail",
+      "name": "Get Video Thumbnail",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [850, 450]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4-turbo",
+        "messages": [
+          {"role": "system", "content": "You are a financial analyst. Analyze this YouTube video content and provide a high-fidelity summary focusing on any financial advice, stock recommendations, technical analysis, or market insights."},
+          {"role": "user", "content": "Video Title: {{$json.title}}\\n\\nTranscript:\\n{{$json.transcript}}\\n\\nPlease summarize the key financial insights from this video."}
+        ],
+        "options": {"maxTokens": 2000}
+      },
+      "id": "llm-summarize",
+      "name": "LLM Summary",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "channel": "discord",
+        "channelId": "1497920267723214962",
+        "text": "🔮 **YouTube Scrying Orb**\\n\\n**{{$json.title}}**\\n\\n{{$json.summary}}"
+      },
+      "id": "discord-notify",
+      "name": "Discord Notification",
+      "type": "openclaw/message",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "YouTube RSS Trigger": {"main": [[{"node": "Extract Video ID", "type": "main", "index": 0}]]},
+    "Extract Video ID": {"main": [[{"node": "Get Video Metadata", "type": "main", "index": 0}]]},
+    "Get Video Metadata": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "YouTube Transcript": {"main": [[{"node": "LLM Summary", "type": "main", "index": 0}]]},
+    "LLM Summary": {"main": [[{"node": "Discord Notification", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "trigger": {"mode": "cron", "cronExpression": "0 */6 * * *"},
+  "description": "Monitors YouTube creators for new finance videos, extracts transcripts, and generates summaries using LLM"
+}
