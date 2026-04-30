@@ -10,19 +10,20 @@ interface PartyMember {
   status: 'active' | 'idle' | 'sleeping';
   quest: string;
   icon: string;
-  spriteBase: string; // base name of sprite files
-  animation: 'idle' | 'run' | 'attack' | 'guard';
+  spriteIdle: string;
+  spriteAction: string;
+  animation: 'idle' | 'action';
   lastAction?: string;
   lastActionTime?: string;
   errorCount?: number;
 }
 
-// Party members with Tiny Swords sprites
+// Party members with new sprites
 const partyMembers: PartyMember[] = [
-  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteBase: 'Warrior', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
-  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteBase: 'Archer', animation: 'run', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
-  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteBase: 'Monk', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
-  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteBase: 'Lancer', animation: 'run', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
+  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteIdle: '/sprites/party/full/Knight_Idle.png', spriteAction: '/sprites/party/full/Knight_Walk.png', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
+  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteIdle: '/sprites/party/full/Wizard_Idle.png', spriteAction: '/sprites/party/full/Wizard_Attack.png', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
+  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteIdle: '/sprites/party/full/Bard_Idle.png', spriteAction: '/sprites/party/full/Bard_Walk.png', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
+  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteIdle: '/sprites/party/full/Hooded Protagonist.png', spriteAction: '/sprites/party/full/Hooded Protagonist.png', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
 ];
 
 const partyActivityLog = [
@@ -40,32 +41,13 @@ export default function VisualOffice() {
   const [capital] = useState(140000);
   const roi = ((currentNLV - capital) / capital * 100).toFixed(1);
 
-  const getSpriteUrl = (base: string, anim: string) => {
-    // Map animation to sprite file
-    if (base === 'Warrior') {
-      if (anim === 'idle') return '/sprites/party/Warrior_Idle.png';
-      if (anim === 'run') return '/sprites/party/Warrior_Run.png';
-      return '/sprites/party/Warrior_Attack1.png';
-    }
-    if (base === 'Archer') {
-      if (anim === 'idle') return '/sprites/party/Archer_Idle.png';
-      if (anim === 'run') return '/sprites/party/Archer_Run.png';
-      return '/sprites/party/Archer_Shoot.png';
-    }
-    if (base === 'Monk') {
-      return '/sprites/party/Idle.png'; // Using default idle
-    }
-    if (base === 'Lancer') {
-      if (anim === 'idle') return '/sprites/party/Lancer_Idle.png';
-      if (anim === 'run') return '/sprites/party/Lancer_Run.png';
-      return '/sprites/party/Lancer_Down_Attack.png';
-    }
-    return '/sprites/party/Warrior_Idle.png';
+  const getSpriteUrl = (member: PartyMember) => {
+    if (member.animation === 'action') return member.spriteAction;
+    return member.spriteIdle;
   };
 
   const getAnimationClass = (anim: string) => {
-    if (anim === 'run') return 'sprite-working';
-    if (anim === 'attack') return 'sprite-casting';
+    if (anim === 'action') return 'sprite-casting';
     return 'sprite-idle';
   };
 
@@ -89,42 +71,56 @@ export default function VisualOffice() {
         </div>
       </div>
 
-      {/* JRPG Sprite Grid - The Guild Hall */}
+      {/* JRPG Sprite Grid - The Guild Hall with Dungeon Background */}
       <div className="glass-card p-5 relative overflow-hidden">
-        {/* Dungeon background */}
-        <div className="absolute inset-0 pointer-events-none z-0" 
+        {/* Dungeon floor tiles background */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0"
           style={{ 
-            backgroundImage: 'url(/assets/dungeon.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.4
+            backgroundImage: 'url(/assets/dungeon/sprBrick.png)',
+            backgroundSize: '64px 64px',
+            backgroundRepeat: 'repeat',
+            opacity: 0.5
           }} 
         />
-        <h3 className="text-sm font-medium text-white mb-4 relative z-10">⚔️ The Guild Hall - Party Members</h3>
+        {/* Catacombs props overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{ 
+            backgroundImage: 'url(/assets/dungeon/sprPropsCatacombs.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.3
+          }} 
+        />
+        
+        <h3 className="text-sm font-medium text-white mb-4 relative z-10 drop-shadow-md">⚔️ The Guild Hall - Party Members</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
           {partyMembers.map((member, i) => (
-            <div key={i} className="bg-dusk-surface/50 rounded-xl p-4 text-center">
-              {/* Sprite with animation */}
+            <div key={i} className="bg-black/40 rounded-xl p-4 text-center border border-slate-700">
+              {/* Large Sprite */}
               <div className="relative h-32 flex items-center justify-center mb-2">
-                <div className={`sprite-container w-28 h-28 ${getAnimationClass(member.animation)}`}>
+                <div className={`sprite-container ${getAnimationClass(member.animation)}`}>
                   <img 
-                    src={getSpriteUrl(member.spriteBase, member.animation)} 
+                    src={getSpriteUrl(member)} 
                     alt={member.name}
-                    className="w-28 h-28 object-contain drop-shadow-xl"
+                    className="w-28 h-28 object-contain drop-shadow-2xl"
                   />
                 </div>
-                {/* Status indicator */}
+                {/* Status glow */}
+                <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 rounded-full blur-md ${
+                  member.status === 'active' ? 'bg-neon-green' : 'bg-slate-500'
+                }`} />
                 <span className={`absolute top-0 right-0 w-3 h-3 rounded-full ${
                   member.status === 'active' ? 'bg-neon-green pulse-glow' : 'bg-slate-500'
                 }`} />
-                {/* Casting effect for active */}
-                {member.animation === 'attack' && (
-                  <span className="absolute inset-0 rounded-full animate-ping bg-neon-purple/30" />
+                {/* Action effect */}
+                {member.animation === 'action' && (
+                  <span className="absolute inset-0 rounded-full animate-ping bg-neon-purple/40" />
                 )}
               </div>
-              <p className="text-sm font-medium text-white">{member.name}</p>
+              <p className="text-sm font-bold text-white">{member.name}</p>
               <p className="text-xs text-slate-400">{member.role}</p>
-              {/* Quest status */}
               <div className="mt-2 pt-2 border-t border-slate-700/50">
                 <p className="text-[10px] text-neon-cyan">{member.quest}</p>
               </div>
