@@ -3,94 +3,121 @@
   "nodes": [
     {
       "parameters": {
-        "url": "https://www.youtube.com/feeds/videos.xml?channel_id={{channelId}}",
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZ-J2m1AUSLnifUEKam5_dA",
         "options": {"timeout": 10000}
       },
-      "id": "rss-trigger",
-      "name": "YouTube RSS Trigger",
+      "id": "rss-1",
+      "name": "RSS - Verified Investing",
       "type": "n8n-nodes-base.rssRead",
       "typeVersion": 1,
-      "position": [250, 300]
+      "position": [250, 100]
     },
     {
       "parameters": {
-        "functionCode": "return items.map(item => {\n  const videoId = item.json['yt:videoId'];\n  return { json: { videoId, title: item.json.title, link: item.json.link, published: item.json.published } };\n});"
-      },
-      "id": "extract-video-id",
-      "name": "Extract Video ID",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [450, 300]
-    },
-    {
-      "parameters": {
-        "url": "https://noembed.com/embed?url=https://www.youtube.com/watch?v={{$json.videoId}}",
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCK-aOjEvZNJl3HINja0gAiQ",
         "options": {"timeout": 10000}
       },
-      "id": "get-video-metadata",
-      "name": "Get Video Metadata",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 3,
-      "position": [650, 300]
+      "id": "rss-2",
+      "name": "RSS - Adam Khoo",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 250]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRvqjQPSeaWn-uEx-w0XOIg",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-3",
+      "name": "RSS - Benjamin Cowen",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbta0n8i6Rljh0obO7HzG9A",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-4",
+      "name": "RSS - Joseph Carlson",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 550]
     },
     {
       "parameters": {
         "operation": "transcript",
-        "videoId": "={{$json.videoId}}"
+        "videoId": "={{$json['yt:videoId']}}"
       },
       "id": "youtube-transcript",
       "name": "YouTube Transcript",
       "type": "n8n-nodes-base.youtube",
       "typeVersion": 1,
-      "position": [850, 300]
+      "position": [650, 300]
     },
     {
       "parameters": {
-        "url": "https://i.ytimg.com/vi/{{$json.videoId}}/maxresdefault.jpg",
-        "responseType": "buffer"
-      },
-      "id": "get-thumbnail",
-      "name": "Get Video Thumbnail",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 3,
-      "position": [850, 450]
-    },
-    {
-      "parameters": {
-        "model": "gpt-4-turbo",
-        "messages": [
-          {"role": "system", "content": "You are a financial analyst. Analyze this YouTube video content and provide a high-fidelity summary focusing on any financial advice, stock recommendations, technical analysis, or market insights."},
-          {"role": "user", "content": "Video Title: {{$json.title}}\\n\\nTranscript:\\n{{$json.transcript}}\\n\\nPlease summarize the key financial insights from this video."}
-        ],
-        "options": {"maxTokens": 2000}
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "Bearer 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"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {"name": "model", "value": "meta-llama/llama-3.2-1b-instruct"},
+            {"name": "messages", "value": "[{\"role\": \"system\", \"content\": \"You are a financial analyst. Analyze this YouTube video and categorize the content into sections: MACRO (CPI, FOMC, geopolitical), CRYPTO, STOCKS TO WATCH, TECHNICAL ANALYSIS, FUNDAMENTALS. Extract specific ticker symbols, price levels, and actionable insights. Format the output as a structured report.\"},{\"role\": \"user\", \"content\": \"Video Title: {{$json.title}}\\nChannel: {{$json['yt:author']}}\\n\\nTranscript:\\n{{$json.transcript}}\\n\\nProvide a structured breakdown by topic category.\"}]"},
+            {"name": "max_tokens", "value": 600}
+          ]
+        },
+        "options": {"timeout": 30000}
       },
       "id": "llm-summarize",
       "name": "LLM Summary",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
       "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const response = JSON.parse($input.first().json.body);\nconst summary = response.choices[0].message.content;\nconst title = $input.first().json.title || 'Video Summary';\n\nreturn { json: { title, summary } };",
+        "options": {}
+      },
+      "id": "parse-response",
+      "name": "Parse Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1250, 300]
     },
     {
       "parameters": {
         "channel": "discord",
         "channelId": "1497920267723214962",
-        "text": "🔮 **YouTube Scrying Orb**\\n\\n**{{$json.title}}**\\n\\n{{$json.summary}}"
+        "text": "🔮 **YouTube Scrying Orb - Fresh Intel**\n\n**{{$json.title}}**\n\n{{$json.summary}}\n\n---
+*Powered by The Sage*"
       },
       "id": "discord-notify",
       "name": "Discord Notification",
       "type": "openclaw/message",
       "typeVersion": 1,
-      "position": [1250, 300]
+      "position": [1450, 300]
     }
   ],
   "connections": {
-    "YouTube RSS Trigger": {"main": [[{"node": "Extract Video ID", "type": "main", "index": 0}]]},
-    "Extract Video ID": {"main": [[{"node": "Get Video Metadata", "type": "main", "index": 0}]]},
-    "Get Video Metadata": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Verified Investing": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Adam Khoo": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Benjamin Cowen": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Joseph Carlson": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
     "YouTube Transcript": {"main": [[{"node": "LLM Summary", "type": "main", "index": 0}]]},
-    "LLM Summary": {"main": [[{"node": "Discord Notification", "type": "main", "index": 0}]]}
+    "LLM Summary": {"main": [[{"node": "Parse Response", "type": "main", "index": 0}]]},
+    "Parse Response": {"main": [[{"node": "Discord Notification", "type": "main", "index": 0}]]}
   },
   "settings": {"executionOrder": "v1"},
   "trigger": {"mode": "cron", "cronExpression": "0 */6 * * *"},
-  "description": "Monitors YouTube creators for new finance videos, extracts transcripts, and generates summaries using LLM"
+  "description": "Monitors 4 finance YouTube channels, extracts transcripts, categorizes by topic (Macro/Crypto/Stocks/TA), posts to Discord"
 }

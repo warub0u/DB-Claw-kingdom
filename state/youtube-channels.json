@@ -1,0 +1,32 @@
+{
+  "channels": [
+    {
+      "id": "UCZ-J2m1AUSLnifUEKam5_dA",
+      "name": "Verified Investing",
+      "handle": "@verifiedinvesting",
+      "focus": "Technical analysis, macro news",
+      "author": "Gareth Soloway"
+    },
+    {
+      "id": "UCK-aOjEvZNJl3HINja0gAiQ",
+      "name": "Adam Khoo",
+      "handle": "@AdamKhoo",
+      "focus": "Fundamental analysis, stock picks, options",
+      "author": "Adam Khoo"
+    },
+    {
+      "id": "UCRvqjQPSeaWn-uEx-w0XOIg",
+      "name": "Benjamin Cowen",
+      "handle": "@benjaminjcowen",
+      "focus": "Crypto, macro, technical analysis",
+      "author": "Benjamin Cowen"
+    },
+    {
+      "id": "UCbta0n8i6Rljh0obO7HzG9A",
+      "name": "Joseph Carlson Show",
+      "handle": "@JosephCarlsonShow",
+      "focus": "News, fundamental analysis, dividend stocks",
+      "author": "Joseph Carlson"
+    }
+  ]
+}
