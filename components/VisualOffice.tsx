@@ -10,19 +10,19 @@ interface PartyMember {
   status: 'active' | 'idle' | 'sleeping';
   quest: string;
   icon: string;
-  sprite: string; // sprite image URL
-  animation: 'idle' | 'casting' | 'working';
+  spriteBase: string; // base name of sprite files
+  animation: 'idle' | 'run' | 'attack' | 'guard';
   lastAction?: string;
   lastActionTime?: string;
   errorCount?: number;
 }
 
-// Party members with sprite images
+// Party members with Tiny Swords sprites
 const partyMembers: PartyMember[] = [
-  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', sprite: '/sprites/13e11592-5e3a-46c3-bf74-e67fc51a9f26.png', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
-  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', sprite: '/sprites/45c65ca6-9082-4a8d-90f0-95ed2642f517.png', animation: 'casting', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
-  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', sprite: '/sprites/713c3804-13d5-4de8-a43d-4769128f6a1f.png', animation: 'working', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
-  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', sprite: '/sprites/0afb164c-6649-4a81-934e-d0c8bff20489.png', animation: 'working', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
+  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteBase: 'Warrior', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
+  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteBase: 'Archer', animation: 'run', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
+  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteBase: 'Monk', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
+  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteBase: 'Lancer', animation: 'run', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
 ];
 
 const partyActivityLog = [
@@ -40,9 +40,32 @@ export default function VisualOffice() {
   const [capital] = useState(140000);
   const roi = ((currentNLV - capital) / capital * 100).toFixed(1);
 
+  const getSpriteUrl = (base: string, anim: string) => {
+    // Map animation to sprite file
+    if (base === 'Warrior') {
+      if (anim === 'idle') return '/sprites/party/Warrior_Idle.png';
+      if (anim === 'run') return '/sprites/party/Warrior_Run.png';
+      return '/sprites/party/Warrior_Attack1.png';
+    }
+    if (base === 'Archer') {
+      if (anim === 'idle') return '/sprites/party/Archer_Idle.png';
+      if (anim === 'run') return '/sprites/party/Archer_Run.png';
+      return '/sprites/party/Archer_Shoot.png';
+    }
+    if (base === 'Monk') {
+      return '/sprites/party/Idle.png'; // Using default idle
+    }
+    if (base === 'Lancer') {
+      if (anim === 'idle') return '/sprites/party/Lancer_Idle.png';
+      if (anim === 'run') return '/sprites/party/Lancer_Run.png';
+      return '/sprites/party/Lancer_Down_Attack.png';
+    }
+    return '/sprites/party/Warrior_Idle.png';
+  };
+
   const getAnimationClass = (anim: string) => {
-    if (anim === 'casting') return 'sprite-casting';
-    if (anim === 'working') return 'sprite-working';
+    if (anim === 'run') return 'sprite-working';
+    if (anim === 'attack') return 'sprite-casting';
     return 'sprite-idle';
   };
 
@@ -74,16 +97,19 @@ export default function VisualOffice() {
             <div key={i} className="bg-dusk-surface/50 rounded-xl p-4 text-center">
               {/* Sprite with animation */}
               <div className="relative h-24 flex items-center justify-center mb-2">
-                <div className={`sprite-container w-20 h-20 ${getAnimationClass(member.animation)}`}>
-                  {/* Use emoji as fallback, sprite images would go here */}
-                  <span className="text-5xl filter drop-shadow-lg">{member.icon}</span>
+                <div className={`sprite-container ${getAnimationClass(member.animation)}`}>
+                  <img 
+                    src={getSpriteUrl(member.spriteBase, member.animation)} 
+                    alt={member.name}
+                    className="w-16 h-16 object-contain"
+                  />
                 </div>
                 {/* Status indicator */}
                 <span className={`absolute top-0 right-0 w-3 h-3 rounded-full ${
                   member.status === 'active' ? 'bg-neon-green pulse-glow' : 'bg-slate-500'
                 }`} />
                 {/* Casting effect for active */}
-                {member.animation === 'casting' && (
+                {member.animation === 'attack' && (
                   <span className="absolute inset-0 rounded-full animate-ping bg-neon-purple/30" />
                 )}
               </div>
