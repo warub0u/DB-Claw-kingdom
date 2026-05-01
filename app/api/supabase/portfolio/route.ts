@@ -1,16 +1,19 @@
+'use server';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-function getEnvVar(key: string): string | undefined {
-  if (process.env[key]) return process.env[key];
+function getEnvVar(key: string): string {
+  // Try env var first
+  if (process.env[key]) return process.env[key]!;
+  // Try .env.local
   try {
     const envPath = path.join(process.cwd(), '.env.local');
     const envContent = fs.readFileSync(envPath, 'utf8');
     const match = envContent.match(new RegExp(`^${key}=(.+)$`, 'm'));
-    return match ? match[1] : undefined;
+    return match ? match[1] : '';
   } catch {
-    return undefined;
+    return '';
   }
 }
 
@@ -19,7 +22,7 @@ const SUPABASE_KEY = getEnvVar('SUPABASE_SERVICE_ROLE_SECRET');
 
 export async function GET() {
   if (!SUPABASE_KEY) {
-    return NextResponse.json({ error: 'Missing SUPABASE_SERVICE_ROLE_SECRET' }, { status: 500 });
+    return NextResponse.json({ error: 'Missing secret' }, { status: 500 });
   }
 
   try {
@@ -28,42 +31,52 @@ export async function GET() {
       'Authorization': `Bearer ${SUPABASE_KEY}`,
     };
 
-    // Fetch portfolio (current holdings)
+    // Fetch portfolio
     const portfolioRes = await fetch(`${SUPABASE_URL}/rest/v1/portfolio?select=*`, { headers });
     const portfolio = await portfolioRes.json();
 
-    // Fetch NLV history
-    const nlvRes = await fetch(`${SUPABASE_URL}/rest/v1/net_liquidation_history?select=*&order=date desc&limit=30`, { headers });
-    const nlv = await nlvRes.json();
+    // Calculate from portfolio data
+    let totalEquity = 0;
+    let capitalInvested = 0;
 
-    // Fetch transactions
-    const txnRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*&order=transaction_date desc&limit=20`, { headers });
-    const transactions = await txnRes.json();
+    if (Array.isArray(portfolio)) {
+      for (const p of portfolio) {
+        if (p.status !== 'Closed') {
+          const value = p.current_price && p.quantity 
+            ? p.current_price * p.quantity 
+            : p.option_value || 0;
+          totalEquity += value;
+          
+          if (p.capital_invested) {
+            capitalInvested += p.capital_invested;
+          } else if (p.buy_price && p.quantity && p.buy_price > 0) {
+            capitalInvested += p.buy_price * p.quantity;
+          }
+        }
+      }
+    }
 
-    // Fetch valuations
-    const valRes = await fetch(`${SUPABASE_URL}/rest/v1/valuations?select=*`, { headers });
-    const valuations = await valRes.json();
-
-    // Calculate totals
-    const totalEquity = Array.isArray(portfolio) ? portfolio.reduce((sum: number, p: any) => sum + (p.equity || p.price * p.quantity || 0), 0) : 0;
-    const currentNLV = Array.isArray(nlv) && nlv.length > 0 ? nlv[0].net_liquidation_value : totalEquity;
-    const capitalInvested = Array.isArray(nlv) && nlv.length > 0 ? nlv[0].capital_invested || 0 : 0;
+    // Get latest NLV from history if available
+    let currentNLV = totalEquity;
+    try {
+      const nlvRes = await fetch(`${SUPABASE_URL}/rest/v1/net_liquidation_history?select=net_liquidation_value&order=recorded_at.desc&limit=1`, { headers });
+      const nlv = await nlvRes.json();
+      if (nlv?.[0]?.net_liquidation_value) {
+        currentNLV = nlv[0].net_liquidation_value;
+      }
+    } catch {}
 
     return NextResponse.json({
-      portfolio: portfolio || [],
-      nlv_history: nlv || [],
-      transactions: transactions || [],
-      valuations: valuations || [],
+      portfolio,
       summary: {
         total_equity: totalEquity,
         current_nlv: currentNLV,
         capital_invested: capitalInvested,
         pnl: currentNLV - capitalInvested,
-        last_updated: nlv?.[0]?.date || new Date().toISOString(),
       },
     });
   } catch (error) {
-    console.error('Supabase fetch error:', error);
-    return NextResponse.json({ error: 'Failed to fetch portfolio data' }, { status: 500 });
+    console.error('Error:', error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
