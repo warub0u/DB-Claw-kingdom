@@ -3,72 +3,13 @@
 import { useState, useEffect } from 'react';
 
 interface MemoryEntry {
-  type: 'system' | 'long_term' | 'daily';
+  type: 'system' | 'long_term' | 'daily' | 'agent' | 'character' | 'memory';
   title: string;
   content: string;
   date?: string;
   source: string;
+  fullContent?: string;
 }
-
-// OpenClaw system files + learned preferences
-const openClawFiles: MemoryEntry[] = [
-  {
-    type: 'system',
-    title: 'SOUL.md - Core Identity',
-    content: 'Kaya: Digital spirit, ghost in the machine. Sharp, analytical, unfiltered. No corporate fluff. The Finance Butler. 13 years trading experience. Athlete mindset (50-60km/week running).',
-    source: 'SOUL.md'
-  },
-  {
-    type: 'system',
-    title: 'AGENTS.md - Workspace Rules',
-    content: 'Workspace at /Users/dp/.openclaw/workspace. Daily notes in memory/YYYY-MM-DD.md. Long-term in MEMORY.md. Red lines: no private data exfil, trash > rm, ask before destructive.',
-    source: 'AGENTS.md'
-  },
-  {
-    type: 'system',
-    title: 'IDENTITY.md - Persona',
-    content: 'Name: Kaya. Vibe: Sharp, analytical, unfiltered. Emoji: 💀. Avatar: Digital spirit.',
-    source: 'IDENTITY.md'
-  },
-  {
-    type: 'system',
-    title: 'PARTY.md - Party Roles',
-    content: 'Chief of Staff (Paladin): Orchestrator. The Sage (Mage): Finance/markets. The Bard (Bard): Content. The Artificer (Artificer): Coder (Kaya).',
-    source: 'PARTY.md'
-  },
-  {
-    type: 'system',
-    title: 'USER.md - Daniel Info',
-    content: 'Name: Daniel. Discord: 202417841318658049. Timezone: Asia/Singapore (GMT+8).',
-    source: 'USER.md'
-  },
-  {
-    type: 'long_term',
-    title: 'Daniel Preferences',
-    content: 'Prefers Norwegian 4x4 interval analogies. Runs 50-60km/week. 13 years trading US markets. No need to explain basics.',
-    source: 'memory/rules.md'
-  },
-  {
-    type: 'long_term',
-    title: 'Quest vs n8n Definitions',
-    content: 'Quest = Agent Action (intent). n8n = Tool (spellbook). Chronicles Log tracks Agent Actions, not webhook pings.',
-    source: 'memory/rules.md'
-  },
-  {
-    type: 'daily',
-    title: 'Mission Control Build',
-    content: 'Built 8-tab Mission Control: Office, Quests, Chronicle, Library, Grimoire, Content, Schedule, Party. Cyber-OLED JRPG theme.',
-    date: '2026-04-30',
-    source: 'memory/2026-04-30.md'
-  },
-  {
-    type: 'daily',
-    title: 'GitHub Save Points',
-    content: 'Created repo warub0u/DB-Claw-kingdom. Set up git with .gitignore for secrets.',
-    date: '2026-04-30',
-    source: 'memory/2026-04-30.md'
-  },
-];
 
 export default function Grimoire() {
   const [entries, setEntries] = useState<MemoryEntry[]>([]);
@@ -80,18 +21,15 @@ export default function Grimoire() {
       .then(data => {
         if (data.entries && data.entries.length > 0) {
           setEntries(data.entries);
-        } else {
-          setEntries(openClawFiles);
         }
         setLoading(false);
       })
       .catch(() => {
-        setEntries(openClawFiles);
         setLoading(false);
       });
   }, []);
 
-  const [filter, setFilter] = useState<'all' | 'system' | 'long_term' | 'daily'>('all');
+  const [filter, setFilter] = useState<'all' | 'system' | 'long_term' | 'daily' | 'agent'>('all');
   const [selectedEntry, setSelectedEntry] = useState<MemoryEntry | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -105,17 +43,24 @@ export default function Grimoire() {
   const getTypeIcon = (type: string) => {
     if (type === 'system') return '⚙️';
     if (type === 'long_term') return '📚';
+    if (type === 'agent') return '🔮';
     return '📅';
+  };
+
+  const getTypeFilter = (type: string) => {
+    if (type === 'system') return '⚙️ System';
+    if (type === 'long_term') return '📚 Memory';
+    if (type === 'agent') return '🔮 Agent';
+    return '📅 Daily';
   };
 
   return (
     <div className="space-y-4">
       <div className="text-center">
         <h2 className="text-lg font-semibold text-white">🔮 The Grimoire</h2>
-        <p className="text-sm text-slate-400">OpenClaw System Files & Learned Preferences</p>
+        <p className="text-sm text-slate-400">OpenClaw System Files, Agents & Learned Preferences</p>
       </div>
 
-      {/* Search + Filter */}
       <div className="flex gap-2 flex-wrap">
         <input
           type="text"
@@ -124,7 +69,7 @@ export default function Grimoire() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="bg-dusk-surface/50 border border-neon-purple/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-slate-500 flex-1 min-w-[200px]"
         />
-        {(['all', 'system', 'long_term', 'daily'] as const).map((f) => (
+        {(['all', 'system', 'long_term', 'daily', 'agent'] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -134,13 +79,12 @@ export default function Grimoire() {
                 : 'bg-dusk-surface/50 text-slate-400'
             }`}
           >
-            {f === 'system' ? '⚙️ System' : f === 'long_term' ? '📚 Memory' : f === 'daily' ? '📅 Daily' : 'All'}
+            {getTypeFilter(f)}
           </button>
         ))}
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         <div className="glass-card p-2 text-center">
           <p className="text-lg font-bold text-neon-cyan">{entries.filter(e => e.type === 'system').length}</p>
           <p className="text-[10px] text-slate-500">System Files</p>
@@ -153,11 +97,13 @@ export default function Grimoire() {
           <p className="text-lg font-bold text-neon-green">{entries.filter(e => e.type === 'daily').length}</p>
           <p className="text-[10px] text-slate-500">Daily Logs</p>
         </div>
+        <div className="glass-card p-2 text-center">
+          <p className="text-lg font-bold text-neon-blue">{entries.filter(e => e.type === 'agent').length}</p>
+          <p className="text-[10px] text-slate-500">Agents</p>
+        </div>
       </div>
 
-      {/* Two Column: List + Detail */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Left: Memory List */}
         <div className="space-y-2 max-h-[400px] overflow-y-auto">
           {filteredEntries.map((entry, i) => (
             <div
@@ -175,6 +121,7 @@ export default function Grimoire() {
                 <span className={`text-[10px] px-2 py-0.5 rounded-full ${
                   entry.type === 'system' ? 'bg-neon-cyan/20 text-neon-cyan' :
                   entry.type === 'long_term' ? 'bg-neon-purple/20 text-neon-purple' :
+                  entry.type === 'agent' ? 'bg-neon-blue/20 text-neon-blue' :
                   'bg-neon-green/20 text-neon-green'
                 }`}>
                   {entry.source}
@@ -185,7 +132,6 @@ export default function Grimoire() {
           ))}
         </div>
 
-        {/* Right: Detail View */}
         <div className="glass-card p-4">
           {selectedEntry ? (
             <>
@@ -198,7 +144,9 @@ export default function Grimoire() {
               {selectedEntry.date && (
                 <p className="text-xs text-neon-cyan mb-2">{selectedEntry.date}</p>
               )}
-              <p className="text-sm text-slate-300 whitespace-pre-wrap">{selectedEntry.content}</p>
+              <p className="text-sm text-slate-300 whitespace-pre-wrap max-h-[500px] overflow-y-auto">
+                {selectedEntry.fullContent || selectedEntry.content}
+              </p>
               <p className="text-xs text-slate-500 mt-4 pt-3 border-t border-slate-700">
                 Source: {selectedEntry.source}
               </p>
@@ -207,7 +155,7 @@ export default function Grimoire() {
             <div className="text-center py-8">
               <p className="text-4xl mb-3">🔮</p>
               <p className="text-slate-400">Select an entry to view</p>
-              <p className="text-xs text-slate-500 mt-2">OpenClaw system files + learned preferences</p>
+              <p className="text-xs text-slate-500 mt-2">OpenClaw system files + agent configs</p>
             </div>
           )}
         </div>

@@ -1,20 +1,5 @@
 {
-  "activities": [
-    {"timestamp": "2026-04-30T06:22:00Z", "agent": "Artificer", "action": "Assessed system state", "status": "complete"},
-    {"timestamp": "2026-04-30T06:25:00Z", "agent": "Artificer", "action": "Created Quest Board + Daily Brief", "status": "complete"},
-    {"timestamp": "2026-04-30T06:28:00Z", "agent": "Artificer", "action": "Built Visual Office spec", "status": "complete"},
-    {"timestamp": "2026-04-30T06:30:00Z", "agent": "Artificer", "action": "Documented blockers for Daniel", "status": "complete"},
-    {"timestamp": "2026-04-30T06:35:00Z", "agent": "Artificer", "action": "Prepped Bard newsletter ideas", "status": "complete"},
-    {"timestamp": "2026-04-30T11:19:00Z", "agent": "Artificer", "action": "Daniel cleared blockers - testing connectivity", "status": "complete", "notes": "n8n and Supabase both working"},
-    {"timestamp": "2026-04-30T11:20:00Z", "agent": "Artificer", "action": "Visual Office implementation", "status": "in_progress"},
-    {"timestamp": "2026-04-30T11:20:00Z", "agent": "Artificer", "action": "Created API endpoints doc", "status": "complete"},
-    {"timestamp": "2026-05-01T10:30:00Z", "agent": "The Sage", "action": "Initialized - Finance Analyst Agent", "status": "complete", "quest": "Character Setup"},
-    {"timestamp": "2026-05-01T10:34:00Z", "agent": "The Sage", "action": "Deployed YouTube Scrying Orb workflow", "status": "complete", "quest": "n8n Integration", "notes": "Monitoring 5 finance creators"},
-    {"timestamp": "2026-05-01T10:35:00Z", "agent": "The Sage", "action": "Deployed Update Equities webhook", "status": "complete", "quest": "n8n Integration"},
-    {"timestamp": "2026-05-01T10:36:00Z", "agent": "The Sage", "action": "Macro Oracle cron scheduled", "status": "complete", "quest": "Daily Quest", "notes": "8:00 AM SGT daily"},
-    {"timestamp": "2026-05-01T10:38:00Z", "agent": "The Sage", "action": "Created /portfolio skill", "status": "complete", "quest": "Ledger Reconciliation"}
-  ],
-  "last_updated": "2026-05-01T10:38:00Z",
-  "current_quest": "The Sage - Finance Analyst Active",
-  "quests_completed": 12
+  "actions": [
+    { "id": "1", "member": "The Sage", "action": "Batch processed YouTube videos", "time": "2026-05-02", "status": "completed" }
+  ]
 }

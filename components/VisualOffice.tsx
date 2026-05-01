@@ -37,11 +37,11 @@ const partyActivityLog = [
 ];
 
 export default function VisualOffice() {
-  const [party, setParty] = useState<PartyMember[]>(partyMembers);
-  const [activity, setActivity] = useState(partyActivityLog);
+  const [party, setParty] = useState<PartyMember[]>([]);
+  const [activity, setActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentNLV, setCurrentNLV] = useState<number>(190093);
-  const [capital] = useState(140000);
+  const [currentNLV, setCurrentNLV] = useState<number | null>(null);
+  const [capital, setCapital] = useState<number | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -61,10 +61,13 @@ export default function VisualOffice() {
       if (portfolioData?.summary?.current_nlv) {
         setCurrentNLV(portfolioData.summary.current_nlv);
       }
+      if (portfolioData?.summary?.capital) {
+        setCapital(portfolioData.summary.capital);
+      }
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
-  const roi = ((currentNLV - capital) / capital * 100).toFixed(1);
+  const roi = capital ? ((currentNLV ?? 0) - capital) / capital * 100 : 0;
 
   const getSpriteUrl = (member: PartyMember) => {
     if (member.animation === 'action') return member.spriteAction;

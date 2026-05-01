@@ -1,0 +1,11 @@
+{
+  "party": [
+    { "name": "Chief of Staff", "role": "Paladin", "class": "🛡️", "status": "active", "quest": "Orchestrating workflows", "lastAction": "Monitoring system health", "lastActionTime": "now" },
+    { "name": "The Sage", "role": "Mage", "class": "🔮", "status": "active", "quest": "Macro analysis", "lastAction": "YouTube batch processing", "lastActionTime": "now" },
+    { "name": "The Bard", "role": "Bard", "class": "🎭", "status": "active", "quest": "Content generation", "lastAction": "Newsletter prep", "lastActionTime": "now" },
+    { "name": "The Artificer", "role": "Artificer", "class": "⚙️", "status": "active", "quest": "Building automations", "lastAction": "n8n workflow maintenance", "lastActionTime": "now" }
+  ],
+  "activity_log": [
+    { "member": "The Sage", "action": "Batch processed 3 YouTube videos", "time": "now", "status": "completed" }
+  ]
+}

@@ -70,9 +70,9 @@ export default function PartyScreen() {
       })
       .catch(() => setLoading(false));
   }, []);
-  const [nlv, setNlv] = useState<number>(190092);
-  const [capital] = useState(140000);
-  const [cashPct, setCashPct] = useState(15); // Mock: 15% cash
+  const [nlv, setNlv] = useState<number | null>(null);
+  const [capital, setCapital] = useState<number | null>(null);
+  const [cashPct, setCashPct] = useState<number | null>(null);
 
   // Calculate HP (Portfolio Health) - based on ROI
   const roi = ((nlv - capital) / capital) * 100;

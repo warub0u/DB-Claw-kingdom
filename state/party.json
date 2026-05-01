@@ -1,0 +1,8 @@
+{
+  "party": [
+    { "name": "Chief of Staff", "role": "Paladin", "class": "🛡️", "status": "active", "quest": "Orchestrating workflows" },
+    { "name": "The Sage", "role": "Mage", "class": "🔮", "status": "active", "quest": "Macro analysis" },
+    { "name": "The Bard", "role": "Bard", "class": "🎭", "status": "active", "quest": "Content generation" },
+    { "name": "The Artificer", "role": "Artificer", "class": "⚙️", "status": "active", "quest": "Building automations" }
+  ]
+}
