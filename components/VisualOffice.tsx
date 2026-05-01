@@ -81,7 +81,7 @@ export default function VisualOffice() {
         <div className="glass-card p-5">
           <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Net Liquidation</p>
           <p className="text-2xl font-bold text-white">
-            ${currentNLV.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            ${(currentNLV ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </p>
         </div>
         <div className="glass-card p-5">

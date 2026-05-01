@@ -75,7 +75,7 @@ export default function PartyScreen() {
   const [cashPct, setCashPct] = useState<number | null>(null);
 
   // Calculate HP (Portfolio Health) - based on ROI
-  const roi = ((nlv - capital) / capital) * 100;
+  const roi = capital ? ((nlv ?? 0) - capital) / capital * 100 : 0;
   const hpPct = Math.min(100, Math.max(0, 50 + (roi / 2))); // Base 50%, scales with ROI
 
   useEffect(() => {
@@ -185,7 +185,7 @@ export default function PartyScreen() {
               style={{ width: `${hpPct}%` }}
             />
           </div>
-          <p className="text-xs text-slate-500 mt-1">NLV: ${nlv.toLocaleString()} / ${capital.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">NLV: ${(nlv ?? 0).toLocaleString()} / ${(capital ?? 0).toLocaleString()}</p>
         </div>
 
         {/* MP Bar - Cash/Resources */}
