@@ -37,8 +37,33 @@ const partyActivityLog = [
 ];
 
 export default function VisualOffice() {
+  const [party, setParty] = useState<PartyMember[]>(partyMembers);
+  const [activity, setActivity] = useState(partyActivityLog);
+  const [loading, setLoading] = useState(true);
   const [currentNLV, setCurrentNLV] = useState<number>(190093);
   const [capital] = useState(140000);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/state/visual_office.json').then(r => r.json()),
+      fetch('/api/supabase/portfolio').then(r => r.json()).catch(() => null)
+    ]).then(([officeData, portfolioData]) => {
+      if (officeData?.party) {
+        setParty(officeData.party.map((p: any) => ({
+          ...p,
+          icon: p.class,
+          spriteIdle: '/sprites/party/full/paladin_200.gif',
+          spriteAction: '/sprites/party/full/paladin_200.gif',
+          animation: 'idle' as const,
+        })));
+        if (officeData.activity_log) setActivity(officeData.activity_log);
+      }
+      if (portfolioData?.summary?.current_nlv) {
+        setCurrentNLV(portfolioData.summary.current_nlv);
+      }
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
   const roi = ((currentNLV - capital) / capital * 100).toFixed(1);
 
   const getSpriteUrl = (member: PartyMember) => {
@@ -91,7 +116,7 @@ export default function VisualOffice() {
         
         <h3 className="text-sm font-medium text-white mb-4 relative z-10 drop-shadow-md">⚔️ The Guild Hall - Party Members</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
-          {partyMembers.map((member, i) => (
+          {party.map((member, i) => (
             <div key={i} className="bg-black/40 rounded-xl p-4 text-center border border-slate-700">
               {/* GIF Sprite with proper rendering rules */}
               <div className="relative h-32 flex items-center justify-center mb-2">
@@ -145,7 +170,7 @@ export default function VisualOffice() {
         </div>
         
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {partyActivityLog.map((activity, i) => (
+          {activity.map((activity, i) => (
             <div 
               key={i} 
               className={`flex items-center gap-3 p-2 rounded-lg ${

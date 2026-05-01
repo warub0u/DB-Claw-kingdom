@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface MemoryEntry {
   type: 'system' | 'long_term' | 'daily';
@@ -71,7 +71,32 @@ const openClawFiles: MemoryEntry[] = [
 ];
 
 export default function Grimoire() {
-  const [entries, setEntries] = useState<MemoryEntry[]>(openClawFiles);
+  const [entries, setEntries] = useState<MemoryEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/supabase/knowledge')
+      .then(res => res.json())
+      .then(data => {
+        if (data.knowledge_base && data.knowledge_base.length > 0) {
+          const mapped = data.knowledge_base.map((kb: any) => ({
+            type: 'system' as const,
+            title: kb.document_name,
+            content: kb.ai_summary || 'No summary available',
+            source: `${kb.asset_class || 'General'} • ${kb.doc_type || 'Document'}`,
+          }));
+          setEntries(mapped);
+        } else {
+          setEntries(openClawFiles);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setEntries(openClawFiles);
+        setLoading(false);
+      });
+  }, []);
+
   const [filter, setFilter] = useState<'all' | 'system' | 'long_term' | 'daily'>('all');
   const [selectedEntry, setSelectedEntry] = useState<MemoryEntry | null>(null);
   const [searchQuery, setSearchQuery] = useState('');

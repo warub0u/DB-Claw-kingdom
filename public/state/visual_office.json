@@ -1,0 +1,16 @@
+{
+  "party": [
+    {"name": "Chief of Staff", "role": "Paladin", "class": "🛡️", "status": "active", "quest": "Orchestrating workflows", "lastAction": "Consolidated morning reports", "lastActionTime": "09:00"},
+    {"name": "The Sage", "role": "Mage", "class": "🔮", "status": "active", "quest": "Finance analysis active", "lastAction": "Macro Oracle ready", "lastActionTime": "08:00"},
+    {"name": "The Bard", "role": "Bard", "class": "🎭", "status": "active", "quest": "Newsletter generation", "lastAction": "Newsletter drafted", "lastActionTime": "07:45"},
+    {"name": "The Artificer", "role": "Artificer", "class": "⚙️", "status": "active", "quest": "Mission Control dashboard", "lastAction": "Real-time data connected", "lastActionTime": "10:40"}
+  ],
+  "activity_log": [
+    {"member": "The Sage", "action": "Initialized - Finance Analyst Agent", "time": "2026-05-01 10:30", "status": "completed"},
+    {"member": "The Sage", "action": "Deployed YouTube Scrying Orb workflow", "time": "2026-05-01 10:34", "status": "completed"},
+    {"member": "The Sage", "action": "Macro Oracle cron scheduled", "time": "2026-05-01 10:36", "status": "completed"},
+    {"member": "The Artificer", "action": "Fixed Chronicle - real-time data", "time": "2026-05-01 10:40", "status": "completed"},
+    {"member": "Chief of Staff", "action": "Consolidated morning reports", "time": "2026-04-30 09:00", "status": "completed"}
+  ],
+  "last_updated": "2026-05-01T10:40:00Z"
+}

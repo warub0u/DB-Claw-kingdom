@@ -51,23 +51,19 @@ export default function InteractiveChart() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(
-        'https://aigwegrqrxquqbjfjcyg.supabase.co/rest/v1/net_liquidation_history?select=date,net_liquidation_value,capital_invested&order=date.asc',
-        {
-          headers: {
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZ3dlZ3JxcnhxdXFiamZqY3lnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjE5NDIwMywiZXhwIjoyMDg3NzcwMjAzfQ.46n16ytgbz5fKfOZ7ljevXuOzA3b1HykeMuAQCzBclo',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZ3dlZ3JxcnhxdXFiamZqY3lnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjE5NDIwMywiZXhwIjoyMDg3NzcwMjAzfQ.46n16ytgbz5fKfOZ7ljevXuOzA3b1HykeMuAQCzBclo',
-          },
-        }
-      );
-      
+      const res = await fetch('/api/supabase/portfolio');
       const json = await res.json();
-      const formatted = json.map((d: any) => ({
-        date: d.date.slice(5), // MM-DD format
-        value: d.net_liquidation_value,
-        capital: d.capital_invested,
-      }));
-      setData(formatted);
+      
+      if (json.nlv_history && json.nlv_history.length > 0) {
+        const formatted = json.nlv_history.map((d: any) => ({
+          date: d.date?.slice(5) || d.date,
+          value: d.net_liquidation_value,
+          capital: d.capital_invested,
+        }));
+        setData(formatted.reverse());
+      } else {
+        setData(demoNLV.map(d => ({ ...d, date: d.date.slice(5) })));
+      }
     } catch (e) {
       console.error('Using demo data:', e);
       setData(demoNLV.map(d => ({ ...d, date: d.date.slice(5) })));

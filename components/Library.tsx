@@ -31,21 +31,16 @@ export default function Library() {
 
   const fetchData = async () => {
     try {
-      const headers = {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZ3dlZ3JxcnhxdXFiamZqY3lnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjE5NDIwMywiZXhwIjoyMDg3NzcwMjAzfQ.46n16ytgbz5fKfOZ7ljevXuOzA3b1HykeMuAQCzBclo',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZ3dlZ3JxcnhxdXFiamZqY3lnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjE5NDIwMywiZXhwIjoyMDg3NzcwMjAzfQ.46n16ytgbz5fKfOZ7ljevXuOzA3b1HykeMuAQCzBclo',
-      };
-
       const [kbRes, nlRes] = await Promise.all([
-        fetch('https://aigwegrqrxquqbjfjcyg.supabase.co/rest/v1/knowledge_base?select=id,document_name,asset_class,ai_summary&limit=30', { headers }),
-        fetch('https://aigwegrqrxquqbjfjcyg.supabase.co/rest/v1/newsletters?select=*', { headers }),
+        fetch('/api/supabase/knowledge'),
+        fetch('/api/supabase/newsletters'),
       ]);
 
       const kbData = await kbRes.json();
       const nlData = await nlRes.json();
 
-      setDocs(kbData);
-      setNewsletters(nlData);
+      setDocs(kbData.knowledge_base || []);
+      setNewsletters(nlData.newsletters || []);
     } catch (e) {
       console.error('Library fetch error:', e);
     } finally {
