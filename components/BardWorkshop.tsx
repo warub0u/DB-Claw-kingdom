@@ -35,7 +35,37 @@ const bardActivity: BardActivity[] = [
 ];
 
 export default function BardWorkshop() {
-  const [briefs, setBriefs] = useState<MarketBrief[]>(marketBriefs);
+  const [briefs, setBriefs] = useState<MarketBrief[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Try Supabase API first, fall back to local JSON
+    fetch('/api/supabase/newsletters')
+      .then(res => res.json())
+      .then(data => {
+        if (data.newsletters && data.newsletters.length > 0) {
+          const mapped = data.newsletters.map((n: any) => ({
+            id: n.id,
+            title: n.title,
+            type: 'analysis',
+            status: n.status?.toLowerCase() || 'draft',
+            created: n.publish_date || n.created_at,
+            author: 'The Bard',
+            summary: n.content_body?.substring(0, 100) || '',
+          }));
+          setBriefs(mapped);
+        } else {
+          return fetch('/state/daily_brief.json');
+        }
+      })
+      .then(res => res?.json())
+      .then(data => {
+        if (data?.briefs && briefs.length === 0) setBriefs(data.briefs);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   const [filter, setFilter] = useState<'all' | 'daily' | 'weekly' | 'analysis'>('all');
   const [selectedBrief, setSelectedBrief] = useState<MarketBrief | null>(null);
 

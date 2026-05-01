@@ -1,0 +1,16 @@
+{
+  "scheduled": [
+    {"id": "s1", "quest": "Morning Market Brief (Macro Oracle)", "agent": "The Sage", "scheduledFor": "08:00 SGT", "recurrence": "daily", "nextRun": "2026-05-02T00:00:00Z"},
+    {"id": "s2", "quest": "Daily Digest Generation", "agent": "The Bard", "scheduledFor": "09:00 SGT", "recurrence": "daily", "nextRun": "2026-05-02T01:00:00Z"},
+    {"id": "s3", "quest": "Weekly Options Alpha", "agent": "The Bard", "scheduledFor": "18:00 SGT Sunday", "recurrence": "weekly", "nextRun": "2026-05-04T10:00:00Z"},
+    {"id": "s4", "quest": "Portfolio Review", "agent": "The Sage", "scheduledFor": "17:00 SGT", "recurrence": "daily", "nextRun": "2026-05-02T09:00:00Z"}
+  ],
+  "completed": [
+    {"id": "c1", "quest": "Chronicle Refactor", "agent": "The Artificer", "completedAt": "2026-05-01T10:40:00Z", "status": "completed", "xpGained": 150},
+    {"id": "c2", "quest": "The Sage Initialization", "agent": "The Sage", "completedAt": "2026-05-01T10:38:00Z", "status": "completed", "xpGained": 200},
+    {"id": "c3", "quest": "YouTube Scrying Orb", "agent": "The Sage", "completedAt": "2026-05-01T10:34:00Z", "status": "completed", "xpGained": 150},
+    {"id": "c4", "quest": "Update Equities Webhook", "agent": "The Sage", "completedAt": "2026-05-01T10:35:00Z", "status": "completed", "xpGained": 100},
+    {"id": "c5", "quest": "Mission Control SPEC", "agent": "The Artificer", "completedAt": "2026-04-30T11:45:00Z", "status": "completed", "xpGained": 75}
+  ],
+  "last_updated": "2026-05-01T10:40:00Z"
+}

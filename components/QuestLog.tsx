@@ -47,14 +47,26 @@ export default function QuestLog() {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'pending'>('all');
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
   const [activities, setActivities] = useState<Activity[]>(recentActivity);
+  const [questList, setQuestList] = useState<Quest[]>(quests);
+  const [loading, setLoading] = useState(true);
 
-  const filteredQuests = quests.filter(q => filter === 'all' || q.status === filter);
+  useEffect(() => {
+    fetch('/state/quests.json')
+      .then(res => res.json())
+      .then(data => {
+        if (data.quests) setQuestList(data.quests);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredQuests = questList.filter(q => filter === 'all' || q.status === filter);
 
   const stats = {
-    total: quests.length,
-    active: quests.filter(q => q.status === 'active').length,
-    completed: quests.filter(q => q.status === 'completed').length,
-    pending: quests.filter(q => q.status === 'pending').length,
+    total: questList.length,
+    active: questList.filter(q => q.status === 'active').length,
+    completed: questList.filter(q => q.status === 'completed').length,
+    pending: questList.filter(q => q.status === 'pending').length,
   };
 
   const getAgentIcon = (agent: string) => {

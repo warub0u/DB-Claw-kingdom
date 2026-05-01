@@ -32,10 +32,29 @@ export default function Chronicle() {
   const filteredActions = actions.filter(a => filter === 'all' || a.status === filter);
 
   useEffect(() => {
-    setTimeout(() => {
-      setActions(demoActions);
-      setLoading(false);
-    }, 300);
+    fetch('/state/party_activity.json')
+      .then(res => res.json())
+      .then(data => {
+        if (data.activities) {
+          const mapped: AgentAction[] = data.activities.map((a: any, i: number) => ({
+            id: String(i),
+            agent: a.agent,
+            action: a.action,
+            quest: a.quest || 'General Task',
+            target: a.notes,
+            status: a.status === 'complete' ? 'completed' : a.status === 'in_progress' ? 'in_progress' : 'error',
+            timestamp: new Date(a.timestamp).toLocaleString('en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+          }));
+          setActions(mapped);
+        } else {
+          setActions(demoActions);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setActions(demoActions);
+        setLoading(false);
+      });
   }, []);
 
   const getAgentIcon = (agent: string) => {

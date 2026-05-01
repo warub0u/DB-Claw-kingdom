@@ -1,0 +1,119 @@
+{
+  "name": "YouTube Scrying Orb - Content Monitor",
+  "nodes": [
+    {
+      "parameters": { "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCK-aOjEvZNJl3HINja0gAiQ" },
+      "id": "rss_adamkhoo",
+      "name": "RSS - Adam Khoo",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": { "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCigUBIf-zt_DA6xyOQtq2WA" },
+      "id": "rss_clearvaluetax",
+      "name": "RSS - ClearValue Tax",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [100, 450]
+    },
+    {
+      "parameters": { "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRvqjQPSeaWn-uEx-w0XOIg" },
+      "id": "rss_benjaminjcowen",
+      "name": "RSS - Benjamin Cowen",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [100, 600]
+    },
+    {
+      "parameters": { "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfCT7SSFEWyG4th9ZmaGYqQ" },
+      "id": "rss_josephcarlson",
+      "name": "RSS - Joseph Carlson",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [100, 750]
+    },
+    {
+      "parameters": { "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZ-J2m1AUSLnifUEKam5_dA" },
+      "id": "rss_verifiedinvesting",
+      "name": "RSS - Verified Investing",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [100, 900]
+    },
+    {
+      "parameters": { "mode": "merge", "property1": "={{ $json.entry }}", "property2": "={{ $json.entry }}" },
+      "id": "merge_rss",
+      "name": "Merge RSS Feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [300, 500]
+    },
+    {
+      "parameters": {
+        "operation": "convert",
+        "property": "json",
+        "from": "xml",
+        "to": "json"
+      },
+      "id": "xml_to_json",
+      "name": "XML to JSON",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.danielpzk.com/webhook/youtube-scribe",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [{ "name": "Content-Type", "value": "application/json" }] },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "videoId", "value": "={{ $json.id.split(':')[2] }}" },
+            { "name": "channelName", "value": "={{ $json.author.name }}" },
+            { "name": "videoTitle", "value": "={{ $json.title }}" },
+            { "name": "published", "value": "={{ $json.published }}" }
+          ]
+        }
+      },
+      "id": "call_llm",
+      "name": "Call LLM (OpenRouter)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 500]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.danielpzk.com/webhook/discord-investing",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [{ "name": "Content-Type", "value": "application/json" }] },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "content", "value": "📺 **New Video Analyzed**\n\n**Channel:** {{ $json.channelName }}\n**Title:** {{ $json.videoTitle }}\n\n**Summary:** {{ $json.summary }}" }
+          ]
+        }
+      },
+      "id": "discord_notify",
+      "name": "Notify Discord",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 500]
+    }
+  ],
+  "connections": {
+    "RSS - Adam Khoo": { "main": [[{"node": "Merge RSS Feeds", "type": "main", "index": 0}]] },
+    "RSS - ClearValue Tax": { "main": [[{"node": "Merge RSS Feeds", "type": "main", "index": 1}]] },
+    "RSS - Benjamin Cowen": { "main": [[{"node": "Merge RSS Feeds", "type": "main", "index": 2}]] },
+    "RSS - Joseph Carlson": { "main": [[{"node": "Merge RSS Feeds", "type": "main", "index": 3}]] },
+    "RSS - Verified Investing": { "main": [[{"node": "Merge RSS Feeds", "type": "main", "index": 4}]] },
+    "Merge RSS Feeds": { "main": [[{"node": "XML to JSON", "type": "main", "index": 0}]] },
+    "XML to JSON": { "main": [[{"node": "Call LLM (OpenRouter)", "type": "main", "index": 0}]] },
+    "Call LLM (OpenRouter)": { "main": [[{"node": "Notify Discord", "type": "main", "index": 0}]] }
+  },
+  "active": false,
+  "id": "youtube-scrying-orb"
+}

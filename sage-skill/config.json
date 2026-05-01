@@ -1,0 +1,7 @@
+{
+  "name": "sage-portfolio",
+  "description": "The Sage - Portfolio Reconciliation and Ledger Breakdown",
+  "triggers": ["/portfolio", "update portfolio", "portfolio breakdown"],
+  "skills": ["sage-portfolio"],
+  "version": "1.0.0"
+}

@@ -58,6 +58,18 @@ const partyData: PartyMember[] = [
 
 export default function PartyScreen() {
   const [selectedMember, setSelectedMember] = useState<PartyMember | null>(null);
+  const [party, setParty] = useState<PartyMember[]>(partyData);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/state/party.json')
+      .then(res => res.json())
+      .then(data => {
+        if (data.party) setParty(data.party);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
   const [nlv, setNlv] = useState<number>(190092);
   const [capital] = useState(140000);
   const [cashPct, setCashPct] = useState(15); // Mock: 15% cash
@@ -96,7 +108,7 @@ export default function PartyScreen() {
 
       {/* Party Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {partyData.map((member, i) => (
+        {party.map((member, i) => (
           <div
             key={i}
             onClick={() => setSelectedMember(member)}

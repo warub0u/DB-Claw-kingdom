@@ -1,0 +1,14 @@
+{
+  "quests": [
+    {"id": "q1", "title": "Build Mission Control Dashboard", "description": "Create a modern JRPG-style Next.js dashboard with 5 screens", "status": "completed", "priority": "high", "assignee": "The Artificer", "dueDate": "2026-04-30"},
+    {"id": "q2", "title": "Connect All Supabase Tables", "description": "Wire up all 9 tables for the library and treasury", "status": "completed", "priority": "high", "assignee": "The Artificer"},
+    {"id": "q3", "title": "Define Party Roles", "description": "Create PARTY.md with Paladin, Mage, Bard, Artificer definitions", "status": "completed", "priority": "medium", "assignee": "The Chief of Staff"},
+    {"id": "q4", "title": "n8n Workflow Documentation", "description": "Map all 13 active n8n workflows for Visual Office", "status": "completed", "priority": "medium", "assignee": "The Artificer"},
+    {"id": "q5", "title": "Implement Live Portfolio Feed", "description": "Real-time portfolio and NLV updates from Supabase", "status": "completed", "priority": "high", "assignee": "The Sage", "dueDate": "2026-05-01"},
+    {"id": "q6", "title": "The Sage Finance Analyst", "description": "Initialize Sage as finance analyst with Macro Oracle, YouTube monitoring, /portfolio command", "status": "completed", "priority": "high", "assignee": "The Sage"},
+    {"id": "q7", "title": "YouTube Scrying Orb", "description": "Monitor 5 finance creators via n8n RSS + Gemini", "status": "completed", "priority": "medium", "assignee": "The Sage"},
+    {"id": "q8", "title": "Macro Oracle Cron", "description": "Daily 8AM SGT market news analysis", "status": "completed", "priority": "high", "assignee": "The Sage"},
+    {"id": "q9", "title": "Real-time Chronicle Updates", "description": "Fix Chronicle to read from live state files", "status": "completed", "priority": "high", "assignee": "The Artificer"}
+  ],
+  "last_updated": "2026-05-01T10:40:00Z"
+}

@@ -1,0 +1,45 @@
+{
+  "party": [
+    {
+      "name": "Chief of Staff",
+      "role": "Paladin",
+      "class": "Strategic lead. Orchestrates the party, delegates quests, and consolidates reports.",
+      "classIcon": "🛡️",
+      "level": 13,
+      "status": "active",
+      "quest": "Orchestrating multi-workflow execution",
+      "weapon": "Executive Brief Sword"
+    },
+    {
+      "name": "The Sage",
+      "role": "Mage",
+      "class": "Master of US/SG markets, stocks, and options. Casts visualization spells.",
+      "classIcon": "🔮",
+      "level": 13,
+      "status": "active",
+      "quest": "Finance Analyst Active - Macro Oracle, YouTube Monitoring, Portfolio Commands",
+      "weapon": "Crystal Ball (Recharts)"
+    },
+    {
+      "name": "The Bard",
+      "role": "Bard",
+      "class": "Translates research into impactful, aesthetically inclined content.",
+      "classIcon": "🎭",
+      "level": 5,
+      "status": "active",
+      "quest": "Newsletter generation, video scriptwriting",
+      "weapon": "Pen of Inspiration"
+    },
+    {
+      "name": "The Artificer",
+      "role": "Artificer",
+      "class": "System Architect. Maintains Next.js frontend, Supabase DB, and n8n automation.",
+      "classIcon": "⚙️",
+      "level": 1,
+      "status": "active",
+      "quest": "Mission Control Dashboard - Real-time Agent Monitoring",
+      "weapon": "Keyboard of Debugging"
+    }
+  ],
+  "last_updated": "2026-05-01T10:40:00Z"
+}

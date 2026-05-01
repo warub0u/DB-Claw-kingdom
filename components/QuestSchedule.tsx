@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface QuestCompletion {
   id: string;
@@ -41,6 +41,20 @@ const scheduledQuests: ScheduledQuest[] = [
 
 export default function QuestSchedule() {
   const [view, setView] = useState<'completed' | 'scheduled'>('completed');
+  const [completedQuests, setCompletedQuests] = useState<QuestCompletion[]>([]);
+  const [scheduledQuests, setScheduledQuests] = useState<ScheduledQuest[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/state/scheduled_quests.json')
+      .then(res => res.json())
+      .then(data => {
+        setCompletedQuests(data.completed || []);
+        setScheduledQuests(data.scheduled || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const getAgentIcon = (agent: string) => {
     if (agent.includes('Sage')) return '🔮';
@@ -50,13 +64,16 @@ export default function QuestSchedule() {
     return '👤';
   };
 
+  const questCompletions = completedQuests;
+  const questScheduled = scheduledQuests;
+
   // Stats
-  const totalXP = questCompletions.reduce((sum, q) => sum + q.xpGained, 0);
+  const totalXP = questCompletions.reduce((sum: number, q: QuestCompletion) => sum + (q.xpGained || 0), 0);
   const agentStats = {
-    artificer: questCompletions.filter(q => q.agent === 'The Artificer').reduce((sum, q) => sum + q.xpGained, 0),
-    sage: questCompletions.filter(q => q.agent === 'The Sage').reduce((sum, q) => sum + q.xpGained, 0),
-    bard: questCompletions.filter(q => q.agent === 'The Bard').reduce((sum, q) => sum + q.xpGained, 0),
-    chief: questCompletions.filter(q => q.agent === 'The Chief of Staff').reduce((sum, q) => sum + q.xpGained, 0),
+    artificer: questCompletions.filter((q: QuestCompletion) => q.agent === 'The Artificer').reduce((sum: number, q: QuestCompletion) => sum + (q.xpGained || 0), 0),
+    sage: questCompletions.filter((q: QuestCompletion) => q.agent === 'The Sage').reduce((sum: number, q: QuestCompletion) => sum + (q.xpGained || 0), 0),
+    bard: questCompletions.filter((q: QuestCompletion) => q.agent === 'The Bard').reduce((sum: number, q: QuestCompletion) => sum + (q.xpGained || 0), 0),
+    chief: questCompletions.filter((q: QuestCompletion) => q.agent === 'The Chief of Staff').reduce((sum: number, q: QuestCompletion) => sum + (q.xpGained || 0), 0),
   };
 
   return (
@@ -136,7 +153,7 @@ export default function QuestSchedule() {
       ) : (
         // Scheduled Quests
         <div className="space-y-2">
-          {scheduledQuests.map((sq) => (
+          {questScheduled.map((sq) => (
             <div key={sq.id} className="glass-card p-3 flex items-center gap-3">
               <span className="text-xl">{getAgentIcon(sq.agent)}</span>
               <div className="flex-1">
