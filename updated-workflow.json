@@ -1,0 +1,134 @@
+{
+  "name": "Sage - YouTube Scrying Orb",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZ-J2m1AUSLnifUEKam5_dA",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-1",
+      "name": "RSS - Verified Investing",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 100]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCK-aOjEvZNJl3HINja0gAiQ",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-2",
+      "name": "RSS - Adam Khoo",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 250]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRvqjQPSeaWn-uEx-w0XOIg",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-3",
+      "name": "RSS - Benjamin Cowen",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfCT7SSFEWyG4th9ZmaGYqQ",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-4",
+      "name": "RSS - Joseph Carlson",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 600]
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCigUBIf-zt_DA6xyOQtq2WA",
+        "options": {"timeout": 10000}
+      },
+      "id": "rss-5",
+      "name": "RSS - ClearValue Tax",
+      "type": "n8n-nodes-base.rssRead",
+      "typeVersion": 1,
+      "position": [250, 750]
+    },
+    {
+      "parameters": {
+        "operation": "transcript",
+        "videoId": "={{ $json['yt:videoId'] }}"
+      },
+      "id": "youtube-transcript",
+      "name": "YouTube Transcript",
+      "type": "n8n-nodes-base.youtube",
+      "typeVersion": 1,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "Bearer sk-or-v1-..."},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {"name": "model", "value": "meta-llama/llama-3.2-1b-instruct"},
+            {"name": "messages", "value": "[{\"role\": \"system\", \"content\": \"You are a financial analyst. Analyze this YouTube video and categorize into sections: MACRO (CPI, FOMC, geopolitical), CRYPTO, STOCKS TO WATCH, TECHNICAL ANALYSIS, OPTIONS STRATEGY. Extract specific ticker symbols, price levels, charts/graphs shown, and actionable insights. Format the output as a structured report. Remove any irrelevant content not pertaining to finance.\"},{\"role\": \"user\", \"content\": \"Video Title: {{$json.title}}\\nChannel: {{$json['yt:author']}}\\n\\nTranscript:\\n{{$json.transcript}}\\n\\nProvide a structured breakdown by topic category.\"}]"},
+            {"name": "max_tokens", "value": 800}
+          ]
+        },
+        "options": {"timeout": 30000}
+      },
+      "id": "llm-summarize",
+      "name": "LLM Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "functionCode": "const response = JSON.parse($input.first().json.body);\nconst summary = response.choices[0].message.content;\nconst title = $input.first().json.title || 'Video Summary';\nreturn { json: { title, summary } };",
+        "options": {}
+      },
+      "id": "parse-response",
+      "name": "Parse Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "channel": "discord",
+        "channelId": "1497920267723214962",
+        "text": "🔮 **Sage Report - Fresh Intel**\n\n**{{$json.title}}**\n\n{{$json.summary}}\n\n---\n*Powered by The Sage*"
+      },
+      "id": "discord-notify",
+      "name": "Discord Notification",
+      "type": "openclaw/message",
+      "typeVersion": 1,
+      "position": [1450, 400]
+    }
+  ],
+  "connections": {
+    "RSS - Verified Investing": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Adam Khoo": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Benjamin Cowen": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - Joseph Carlson": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "RSS - ClearValue Tax": {"main": [[{"node": "YouTube Transcript", "type": "main", "index": 0}]]},
+    "YouTube Transcript": {"main": [[{"node": "LLM Summary", "type": "main", "index": 0}]]},
+    "LLM Summary": {"main": [[{"node": "Parse Response", "type": "main", "index": 0}]]},
+    "Parse Response": {"main": [[{"node": "Discord Notification", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "trigger": {"mode": "cron", "cronExpression": "0 8 * * *"},
+  "description": "Monitors 5 finance YouTube channels at 8AM daily, extracts transcripts, categorizes by topic, posts merged report to Discord"
+}
