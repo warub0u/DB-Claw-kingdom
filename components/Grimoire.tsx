@@ -75,17 +75,11 @@ export default function Grimoire() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/supabase/knowledge')
+    fetch('/api/openclaw/memory')
       .then(res => res.json())
       .then(data => {
-        if (data.knowledge_base && data.knowledge_base.length > 0) {
-          const mapped = data.knowledge_base.map((kb: any) => ({
-            type: 'system' as const,
-            title: kb.document_name,
-            content: kb.ai_summary || 'No summary available',
-            source: `${kb.asset_class || 'General'} • ${kb.doc_type || 'Document'}`,
-          }));
-          setEntries(mapped);
+        if (data.entries && data.entries.length > 0) {
+          setEntries(data.entries);
         } else {
           setEntries(openClawFiles);
         }
