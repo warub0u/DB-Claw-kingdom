@@ -21,33 +21,14 @@ interface Activity {
   type: 'move' | 'complete' | 'start' | 'comment';
 }
 
-const quests: Quest[] = [
-  { id: 'q1', title: 'Build Mission Control Dashboard', description: 'Create a modern JRPG-style Next.js dashboard with 5 screens', status: 'active', priority: 'high', assignee: 'The Artificer', dueDate: '2026-04-30' },
-  { id: 'q2', title: 'Connect All Supabase Tables', description: 'Wire up all 9 tables for the library and treasury', status: 'completed', priority: 'high', assignee: 'The Artificer' },
-  { id: 'q3', title: 'Define Party Roles', description: 'Create PARTY.md with Paladin, Mage, Bard, Artificer definitions', status: 'completed', priority: 'medium', assignee: 'The Chief of Staff' },
-  { id: 'q4', title: 'n8n Workflow Documentation', description: 'Map all 13 active n8n workflows for Visual Office', status: 'completed', priority: 'medium', assignee: 'The Artificer' },
-  { id: 'q5', title: 'Implement Live Portfolio Feed', description: 'Real-time portfolio and NLV updates from Supabase', status: 'active', priority: 'high', assignee: 'The Sage', dueDate: '2026-05-01' },
-  { id: 'q6', title: 'Visual Office Pixel Art', description: 'Create modern JRPG style office map with sprite animations', status: 'pending', priority: 'medium', assignee: 'The Artificer' },
-  { id: 'q7', title: 'Knowledge Base Search', description: 'Full-text search across 29 strategy documents', status: 'completed', priority: 'medium', assignee: 'The Bard' },
-  { id: 'q8', title: 'NLV Historical Charts', description: 'Area chart for net liquidation history', status: 'active', priority: 'high', assignee: 'The Sage', dueDate: '2026-04-30' },
-];
 
 // Activity feed - like the original's right sidebar
-const recentActivity: Activity[] = [
-  { id: 'a1', agent: 'The Artificer', action: 'completed', target: 'Chronicle Refactor', timestamp: '13:04', type: 'complete' },
-  { id: 'a2', agent: 'The Artificer', action: 'added HP/MP bars to', target: 'PartyScreen', timestamp: '12:50', type: 'move' },
-  { id: 'a3', agent: 'The Artificer', action: 'pushed to', target: 'GitHub', timestamp: '12:30', type: 'complete' },
-  { id: 'a4', agent: 'The Sage', action: 'retrieved data from', target: 'Supabase', timestamp: '11:20', type: 'start' },
-  { id: 'a5', agent: 'The Artificer', action: 'tested connectivity to', target: 'n8n + Supabase', timestamp: '11:19', type: 'move' },
-  { id: 'a6', agent: 'The Bard', action: 'consulted', target: "Sage's valuation data", timestamp: '08:00', type: 'comment' },
-  { id: 'a7', agent: 'Chief of Staff', action: 'orchestrated', target: '13 n8n workflows', timestamp: '07:00', type: 'complete' },
-];
 
 export default function QuestLog() {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'pending'>('all');
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
-  const [activities, setActivities] = useState<Activity[]>(recentActivity);
-  const [questList, setQuestList] = useState<Quest[]>(quests);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [questList, setQuestList] = useState<Quest[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -20,24 +20,7 @@ interface ScheduledQuest {
 }
 
 // Quest completions by party members - this is the main view!
-const questCompletions: QuestCompletion[] = [
-  { id: 'c1', quest: 'Chronicle Refactor', agent: 'The Artificer', completedAt: '2026-04-30 13:04', status: 'completed', xpGained: 150 },
-  { id: 'c2', quest: 'HP/MP Bars Implementation', agent: 'The Artificer', completedAt: '2026-04-30 12:50', status: 'completed', xpGained: 100 },
-  { id: 'c3', quest: 'GitHub Save Points Setup', agent: 'The Artificer', completedAt: '2026-04-30 12:30', status: 'completed', xpGained: 100 },
-  { id: 'c4', quest: 'Mission Control SPEC', agent: 'The Artificer', completedAt: '2026-04-30 11:45', status: 'completed', xpGained: 75 },
-  { id: 'c5', quest: 'Supabase Wake', agent: 'The Chief of Staff', completedAt: '2026-04-30 11:19', status: 'completed', xpGained: 50 },
-  { id: 'c6', quest: 'Daily Market Brief', agent: 'The Sage', completedAt: '2026-04-30 08:00', status: 'completed', xpGained: 75 },
-  { id: 'c7', quest: 'Portfolio NLV Chart', agent: 'The Sage', completedAt: '2026-04-29 18:00', status: 'completed', xpGained: 100 },
-  { id: 'c8', quest: 'Party Role Definitions', agent: 'The Chief of Staff', completedAt: '2026-04-28 12:00', status: 'completed', xpGained: 50 },
-];
 
-const scheduledQuests: ScheduledQuest[] = [
-  { id: 's1', quest: 'Morning Market Brief', agent: 'The Sage', scheduledFor: '2026-05-01 08:00', recurrence: 'daily' },
-  { id: 's2', quest: 'Daily Digest Generation', agent: 'The Bard', scheduledFor: '2026-05-01 09:00', recurrence: 'daily' },
-  { id: 's3', quest: 'Weekly Options Alpha', agent: 'The Bard', scheduledFor: '2026-05-04 18:00', recurrence: 'weekly' },
-  { id: 's4', quest: 'Portfolio Review', agent: 'The Sage', scheduledFor: '2026-05-01 17:00', recurrence: 'daily' },
-  { id: 's5', quest: 'Knowledge Base Sync', agent: 'The Artificer', scheduledFor: '2026-05-01 00:00', recurrence: 'daily' },
-];
 
 export default function QuestSchedule() {
   const [view, setView] = useState<'completed' | 'scheduled'>('completed');

@@ -14,15 +14,6 @@ interface AgentAction {
 }
 
 // Chronicle format: "> [Agent] [action] and completed the [Quest] Quest."
-const demoActions: AgentAction[] = [
-  { id: '1', agent: 'The Artificer', action: 'assessed system state', quest: 'Build Mission Control', target: 'dashboard', status: 'completed', timestamp: '2026-04-30 11:19' },
-  { id: '2', agent: 'The Artificer', action: 'tested connectivity to', quest: 'Infrastructure Wake', target: 'Supabase + n8n', status: 'completed', timestamp: '2026-04-30 11:20' },
-  { id: '3', agent: 'The Sage', action: 'retrieved latest data from', quest: 'Daily Market Brief', target: 'Supabase', status: 'completed', timestamp: '2026-04-30 11:20' },
-  { id: '4', agent: 'The Artificer', action: 'pushed to', quest: 'GitHub Save Points', target: 'DB-Claw-kingdom', status: 'completed', timestamp: '2026-04-30 11:30' },
-  { id: '5', agent: 'The Artificer', action: 'added HP/MP bars to', quest: 'Party Roster Enhancement', target: 'PartyScreen', status: 'completed', timestamp: '2026-04-30 12:50' },
-  { id: '6', agent: 'The Bard', action: 'consulted', quest: 'Morning Report', target: "The Sage's valuation data", status: 'completed', timestamp: '2026-04-30 08:00' },
-  { id: '7', agent: 'The Chief of Staff', action: 'orchestrated', quest: 'Daily Workflows', target: '13 n8n workflows', status: 'completed', timestamp: '2026-04-30 07:00' },
-];
 
 export default function Chronicle() {
   const [actions, setActions] = useState<AgentAction[]>([]);
@@ -46,13 +37,11 @@ export default function Chronicle() {
             timestamp: new Date(a.timestamp).toLocaleString('en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
           }));
           setActions(mapped);
-        } else {
-          setActions(demoActions);
         }
         setLoading(false);
       })
       .catch(() => {
-        setActions(demoActions);
+        setActions([]);
         setLoading(false);
       });
   }, []);

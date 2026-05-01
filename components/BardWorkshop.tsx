@@ -20,23 +20,12 @@ interface BardActivity {
 }
 
 // Sample data - in production, fetch from Supabase newsletters table
-const marketBriefs: MarketBrief[] = [
-  { id: 'b1', title: 'Morning Market Brief', type: 'daily', status: 'published', created: '2026-04-30 08:00', author: 'The Bard', summary: 'NLV update, top movers, IV analysis' },
-  { id: 'b2', title: 'Weekly Options Alpha', type: 'weekly', status: 'review', created: '2026-04-29 18:00', author: 'The Bard', summary: 'IV rankings, PMCC setups, Greeks analysis' },
-  { id: 'b3', title: 'The Turnaround Play: NKE', type: 'analysis', status: 'draft', created: '2026-04-30 12:00', author: 'The Bard', summary: 'Nike turnaround thesis, margin of safety' },
-  { id: 'b4', title: 'META Valuation Update', type: 'analysis', status: 'published', created: '2026-04-28 09:00', author: 'The Bard', summary: '40% MoS, bear vs bull IV scenarios' },
-];
 
-const bardActivity: BardActivity[] = [
-  { id: 'a1', action: 'generated', target: 'Morning Market Brief', timestamp: '08:00' },
-  { id: 'a2', action: 'consulted', target: "Sage's valuation data", timestamp: '07:55' },
-  { id: 'a3', action: 'submitted', target: 'Weekly Options Alpha for review', timestamp: '18:00' },
-  { id: 'a4', action: 'researched', target: 'Nike turnaround thesis', timestamp: '12:00' },
-];
 
 export default function BardWorkshop() {
   const [briefs, setBriefs] = useState<MarketBrief[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bardActivity, setBardActivity] = useState<{id: string; action: string; target: string; timestamp: string}[]>([]);
 
   useEffect(() => {
     // Try Supabase API first, fall back to local JSON

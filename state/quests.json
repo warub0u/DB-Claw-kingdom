@@ -1,0 +1,9 @@
+{
+  "quests": [
+    { "id": "q1", "title": "Build Mission Control Dashboard", "description": "Create Next.js dashboard with 8 tabs", "status": "completed", "priority": "high", "assigned_to": "The Artificer", "created_at": "2026-04-30" },
+    { "id": "q2", "title": "Set up YouTube monitoring", "description": "Configure RSS feeds for 5 finance channels", "status": "completed", "priority": "high", "assigned_to": "Chief of Staff", "created_at": "2026-05-01" },
+    { "id": "q3", "title": "Connect Supabase portfolio API", "description": "Link portfolio data to VisualOffice", "status": "completed", "priority": "high", "assigned_to": "The Sage", "created_at": "2026-05-01" },
+    { "id": "q4", "title": "Fix Grimoire - show Sage agent", "description": "Include agents/sage.md in memory API", "status": "completed", "priority": "medium", "assigned_to": "Kaya", "created_at": "2026-05-02" },
+    { "id": "q5", "title": "Auto-update party activity", "description": "Cron job to log agent actions to party_activity.json", "status": "in_progress", "priority": "medium", "assigned_to": "The Sage", "created_at": "2026-05-02" }
+  ]
+}

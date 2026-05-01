@@ -19,22 +19,7 @@ interface PartyMember {
 }
 
 // Party members with new sprites
-const partyMembers: PartyMember[] = [
-  { name: 'Chief of Staff', role: 'Paladin', class: '🛡️', status: 'active', quest: 'Orchestrating workflows', icon: '🛡️', spriteIdle: '/sprites/party/full/paladin_200.gif', spriteAction: '/sprites/party/full/paladin_200.gif', animation: 'idle', lastAction: 'Consolidated morning reports', lastActionTime: '09:00', errorCount: 0 },
-  { name: 'The Sage', role: 'Mage', class: '🔮', status: 'active', quest: 'Calculating IV', icon: '🔮', spriteIdle: '/sprites/party/full/wizard_200.gif', spriteAction: '/sprites/party/full/wizard_200.gif', animation: 'action', lastAction: 'IV calculations complete', lastActionTime: '08:30', errorCount: 1 },
-  { name: 'The Bard', role: 'Bard', class: '🎭', status: 'active', quest: 'Generating content', icon: '🎭', spriteIdle: '/sprites/party/full/bard_200.gif', spriteAction: '/sprites/party/full/bard_200.gif', animation: 'idle', lastAction: 'Newsletter draft ready', lastActionTime: '07:45', errorCount: 0 },
-  { name: 'The Artificer', role: 'Artificer', class: '⚙️', status: 'active', quest: 'Building dashboard', icon: '⚙️', spriteIdle: '/sprites/party/full/artificer_200.gif', spriteAction: '/sprites/party/full/artificer_200.gif', animation: 'idle', lastAction: 'Neon Dusk theme applied', lastActionTime: '01:30', errorCount: 0 },
-];
 
-const partyActivityLog = [
-  { member: 'Chief of Staff', action: 'Consolidated morning reports', time: '2026-04-30 09:00', status: 'active' },
-  { member: 'The Sage', action: 'Calculated IV for GOOGL, META, MSFT', time: '2026-04-30 08:30', status: 'active' },
-  { member: 'The Bard', action: 'Generated daily newsletter draft', time: '2026-04-30 07:45', status: 'active' },
-  { member: 'The Artificer', action: 'Built Mission Control dashboard', time: '2026-04-30 01:30', status: 'active' },
-  { member: 'The Sage', action: 'Error: Valuation API timeout', time: '2026-04-29 06:00', status: 'error', error: true },
-  { member: 'The Bard', action: 'Published newsletter', time: '2026-04-28 18:00', status: 'completed' },
-  { member: 'Chief of Staff', action: 'Orchestrated 13 workflows', time: '2026-04-28 12:00', status: 'active' },
-];
 
 export default function VisualOffice() {
   const [party, setParty] = useState<PartyMember[]>([]);

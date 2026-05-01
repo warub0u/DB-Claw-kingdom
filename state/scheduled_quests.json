@@ -1,0 +1,10 @@
+{
+  "completed": [
+    { "id": "cq1", "title": "YouTube batch processing", "completed_at": "2026-05-02T03:40:00Z", "result": "3 videos processed" },
+    { "id": "cq2", "title": "Portfolio sync", "completed_at": "2026-05-02T03:00:00Z", "result": "NLV updated" }
+  ],
+  "scheduled": [
+    { "id": "sq1", "title": "Hourly YouTube check", "schedule": "0 * * * *", "next_run": "2026-05-02T04:00:00Z" },
+    { "id": "sq2", "title": "Daily Macro Report", "schedule": "0 8 * * *", "next_run": "2026-05-03T00:00:00Z" }
+  ]
+}

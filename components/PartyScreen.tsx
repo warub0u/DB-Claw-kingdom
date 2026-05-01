@@ -13,52 +13,10 @@ interface PartyMember {
   weapon: string;
 }
 
-const partyData: PartyMember[] = [
-  {
-    name: 'Chief of Staff',
-    role: 'Paladin',
-    class: 'Strategic lead. Orchestrates the party, delegates quests, and consolidates reports.',
-    classIcon: '🛡️',
-    level: 13,
-    status: 'active',
-    quest: 'Orchestrating multi-workflow execution',
-    weapon: 'Executive Brief Sword',
-  },
-  {
-    name: 'The Sage',
-    role: 'Mage',
-    class: 'Master of US/SG markets, stocks, and options. Casts visualization spells.',
-    classIcon: '🔮',
-    level: 13,
-    status: 'active',
-    quest: 'Intrinsic value calculations, PMCC strategies',
-    weapon: 'Crystal Ball (Recharts)',
-  },
-  {
-    name: 'The Bard',
-    role: 'Bard',
-    class: 'Translates research into impactful, aesthetically inclined content.',
-    classIcon: '🎭',
-    level: 5,
-    status: 'active',
-    quest: 'Newsletter generation, video scriptwriting',
-    weapon: 'Pen of Inspiration',
-  },
-  {
-    name: 'The Artificer',
-    role: 'Artificer',
-    class: 'System Architect. Maintains Next.js frontend, Supabase DB, and n8n automation.',
-    classIcon: '⚙️',
-    level: 1,
-    status: 'active',
-    quest: 'Building Mission Control dashboard',
-    weapon: 'Keyboard of Debugging',
-  },
-];
 
 export default function PartyScreen() {
   const [selectedMember, setSelectedMember] = useState<PartyMember | null>(null);
-  const [party, setParty] = useState<PartyMember[]>(partyData);
+  const [party, setParty] = useState<PartyMember[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -22,11 +22,18 @@
       "author": "Benjamin Cowen"
     },
     {
-      "id": "UCbta0n8i6Rljh0obO7HzG9A",
+      "id": "UCfCT7SSFEWyG4th9ZmaGYqQ",
       "name": "Joseph Carlson Show",
       "handle": "@JosephCarlsonShow",
       "focus": "News, fundamental analysis, dividend stocks",
       "author": "Joseph Carlson"
+    },
+    {
+      "id": "UCigUBIf-zt_DA6xyOQtq2WA",
+      "name": "ClearValue Tax",
+      "handle": "@clearvaluetax",
+      "focus": "Tax strategy, retirement planning, estate planning",
+      "author": "Ed Rempel"
     }
   ]
 }

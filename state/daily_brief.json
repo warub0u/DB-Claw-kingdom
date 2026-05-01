@@ -1,0 +1,6 @@
+{
+  "briefs": [
+    { "id": "b1", "type": "daily", "title": "Morning Market Brief", "content": "S&P futures up 0.3%. Key catalysts: AAPL earnings, Oil weakness, FOMC minutes ahead.", "created_at": "2026-05-02T02:00:00Z" },
+    { "id": "b2", "type": "analysis", "title": "NVDA Technical Update", "content": "Breaking out above $200. Volume 40% above avg. Next resistance $210.", "created_at": "2026-05-01T18:00:00Z" }
+  ]
+}
