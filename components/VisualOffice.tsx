@@ -86,11 +86,11 @@ export default function VisualOffice() {
         </div>
         <div className="glass-card p-5">
           <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Capital Deployed</p>
-          <p className="text-2xl font-bold text-white">${capital.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-white">${(capital ?? 0).toLocaleString()}</p>
         </div>
         <div className="glass-card p-5 border-neon-cyan/30 glow-cyan">
           <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Total ROI</p>
-          <p className="text-2xl font-bold text-neon-cyan">+{roi}%</p>
+          <p className="text-2xl font-bold text-neon-cyan">{isFinite(roi) ? `+${roi.toFixed(1)}%` : '—'}</p>
         </div>
       </div>
 
